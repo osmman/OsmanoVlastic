@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>osmanvlastic</groupId>
+    <artifactId>osmanvlastic</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    
+    
+    <build>
+    	<plugins>
+    		<plugin>
+    			<groupId>org.jboss.as.plugins</groupId>
+    			<artifactId>jboss-as-maven-plugin</artifactId>
+    			<version>7.4.Final</version>
+    			<configuration>
+                    <hostname>10.99.0.10</hostname>
+                    <port>9999</port>
+                    <username>admin</username>
+                    <password>vagrant</password>
+                </configuration>
+    		</plugin>
+    		<plugin>
+    			<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-war-plugin</artifactId>
+    			<version>2.4</version>
+    			<configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration> 
+    		</plugin>
+    	</plugins>
+    </build>
+    <dependencies>
+    	<dependency>
+    		<groupId>com.sun.jersey</groupId>
+    		<artifactId>jersey-servlet</artifactId>
+    		<version>1.17.1</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>com.sun.jersey</groupId>
+    		<artifactId>jersey-bundle</artifactId>
+    		<version>1.17.1</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>com.sun.jersey</groupId>
+    		<artifactId>jersey-json</artifactId>
+    		<version>1.17.1</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>javax.ws.rs</groupId>
+    		<artifactId>jsr311-api</artifactId>
+    		<version>1.1.1</version>
+    	</dependency>
+    </dependencies>
+</project>
