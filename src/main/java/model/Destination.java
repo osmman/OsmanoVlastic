@@ -13,13 +13,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
+@NamedQueries({
+    @NamedQuery(name="Destination.findAll",
+                query="SELECT d FROM Destination d"),
+    @NamedQuery(name="Destination.findByName",
+                query="SELECT d FROM Destination d WHERE d.name = :name"),
+}) 
 public class Destination implements Serializable {
-
-	   
+   
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String name;
+	
 	private static final long serialVersionUID = 1L;
 
 	public Destination() {

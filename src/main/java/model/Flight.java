@@ -20,11 +20,13 @@ public class Flight implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private Date dateOfDeparture;
+	private Date departure;
 	private Float distance;
 	private Integer seats;
 	private Float Price;
+	@Column(name="TO_DESTINATION")
 	private Destination to;
+	@Column(name="FROM_DESTINATION")
 	private Destination from;
 	private static final long serialVersionUID = 1L;
 
@@ -40,12 +42,12 @@ public class Flight implements Serializable {
 		this.id = id;
 	}
 
-	public Date getDateOfDeparture() {
-		return this.dateOfDeparture;
+	public Date getDeparture() {
+		return this.departure;
 	}
 
-	public void setDateOfDeparture(Date dateOfDeparture) {
-		this.dateOfDeparture = dateOfDeparture;
+	public void setDeparture(Date date) {
+		this.departure = date;
 	}
 
 	public Float getDistance() {
@@ -72,4 +74,22 @@ public class Flight implements Serializable {
 		this.Price = Price;
 	}
 
+	public Destination getTo() {
+		return to;
+	}
+
+	public void setTo(Destination to) {
+		this.to = to;
+	}
+
+	public Destination getFrom() {
+		return from;
+	}
+
+	public void setFrom(Destination from) {
+		this.from = from;
+	}
+	
+	
+	
 }

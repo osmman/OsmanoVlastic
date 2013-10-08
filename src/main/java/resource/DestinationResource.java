@@ -1,6 +1,5 @@
 package resource;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -14,23 +13,25 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.Consumes;
 
+import utils.Resources;
 import model.Destination;
 
-@Path(value = "/destination")
-public class DestinationResource {
 
+@Path(value = "/destination")
+public class DestinationResource extends Resources {
+	
 	@GET
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Destination> getDestinations() {
-		return new LinkedList<Destination>();
+		return getEntityManager().createNamedQuery("Destination.findAll", Destination.class).getResultList();
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Destination getDestination(@PathParam("id") Long id) {
-		return null;
+		return getEntityManager().find(Destination.class, id);
 	}
 
 	@POST
@@ -56,4 +57,5 @@ public class DestinationResource {
 	public Response deleteDestination(@PathParam("id") Long id) {
 		return Response.ok().build();
 	}
+
 }
