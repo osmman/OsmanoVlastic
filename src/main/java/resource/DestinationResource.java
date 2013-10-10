@@ -1,14 +1,16 @@
 package resource;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.validation.Valid;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,59 +22,66 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.Consumes;
 
-import utils.Resources;
+import org.jboss.resteasy.annotations.Form;
+import org.jboss.resteasy.spi.validation.ValidateRequest;
+
 import model.Destination;
 
 @Path("/destination")
 @Stateless
-public class DestinationResource {
-	
+public class DestinationResource extends AbstractFacade<Destination> {
+
+	public DestinationResource() {
+		super(Destination.class);
+	}
+
 	@PersistenceContext(name = "primary")
-    private EntityManager em;
-	
+	private EntityManager em;
+
 	@GET
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Destination> getDestinations() {
-		return em.createNamedQuery("Destination.findAll",
-				Destination.class).getResultList();
+		return super.findAll();
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Destination getDestination(@PathParam("id") Long id) {
-		return em.find(Destination.class, id);
+		return super.find(id);
 	}
 
 	@POST
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Destination addDestination(Destination destination) {
-		try {
-			em.persist(destination);
-		} finally {
-			em.close();
-		}
-
-		return destination;
+	public Response addDestination(Destination destination) {
+		super.create(destination);
+		return Response.ok().build();
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Destination editDestination(@PathParam("id") Long id,
-			Destination destination) {
-		return null;
+	public Response editDestination(@PathParam("id") Long id,
+			@Valid Destination destination) {
+		super.edit(destination);
+		return Response.ok().build();
 	}
 
 	@DELETE
 	@Path("tasks/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response deleteDestination(@PathParam("id") Long id) {
+		super.remove(super.find(id));
 		return Response.ok().build();
+	}
+
+	@Override
+	protected EntityManager getEntityManager() {
+		return em;
 	}
 
 }

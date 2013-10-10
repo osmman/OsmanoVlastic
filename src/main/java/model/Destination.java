@@ -1,11 +1,12 @@
 package model;
 
-import java.io.Serializable;
 import java.lang.Long;
 import java.lang.String;
 import java.util.Collection;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -25,6 +26,9 @@ public class Destination{
 	@Id
 	@GeneratedValue
 	private Long id;
+	
+	@NotNull
+	@Size(min=1, max=255)
 	private String name;
 	
 	@OneToMany(mappedBy="from")
