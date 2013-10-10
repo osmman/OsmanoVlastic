@@ -20,14 +20,24 @@ public class Flight implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	private Date departure;
+	
 	private Float distance;
+	
 	private Integer seats;
+	
 	private Float Price;
-	@Column(name="TO_DESTINATION")
+	
+	@ManyToOne
+	@JoinColumn(name = "TO_DESTINATION")
 	private Destination to;
-	@Column(name="FROM_DESTINATION")
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "FROM_DESTINATION")
 	private Destination from;
+	
 	private static final long serialVersionUID = 1L;
 
 	public Flight() {
@@ -89,7 +99,5 @@ public class Flight implements Serializable {
 	public void setFrom(Destination from) {
 		this.from = from;
 	}
-	
-	
-	
+
 }

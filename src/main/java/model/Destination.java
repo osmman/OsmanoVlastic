@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.lang.Long;
 import java.lang.String;
+import java.util.Collection;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -19,12 +20,18 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name="Destination.findByName",
                 query="SELECT d FROM Destination d WHERE d.name = :name"),
 }) 
-public class Destination implements Serializable {
+public class Destination{
    
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private Long id;
 	private String name;
+	
+	@OneToMany(mappedBy="from")
+	private Collection<Flight> departures;
+	
+	@OneToMany(mappedBy="to")
+	private Collection<Flight> arrivals;
 	
 	private static final long serialVersionUID = 1L;
 
