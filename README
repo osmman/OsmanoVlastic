@@ -1,0 +1,8 @@
+Příkaz pro zavedení datasource do jboss serveru:
+
+mvn install
+
+Deploy aplikace na server:
+
+mnv jboss-as:deploy
+
