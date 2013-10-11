@@ -1,4 +1,4 @@
-PÅ™Ã­kaz pro zavedenÃ­ datasource do jboss serveru:
+Pøíkaz vytvoøení datasource do jboss serveru:
 
 mvn install
 

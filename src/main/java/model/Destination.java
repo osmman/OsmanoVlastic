@@ -2,6 +2,7 @@ package model;
 
 import java.lang.Long;
 import java.lang.String;
+import java.net.URI;
 import java.util.Collection;
 
 import javax.persistence.*;
@@ -15,20 +16,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name="Destination.findAll",
-                query="SELECT d FROM Destination d"),
-    @NamedQuery(name="Destination.findByName",
-                query="SELECT d FROM Destination d WHERE d.name = :name"),
-}) 
-public class Destination{
+public class Destination extends UrlResource{
    
 	@Id
 	@GeneratedValue
 	private Long id;
 	
+
 	@NotNull
 	@Size(min=1, max=255)
+	@Column(unique=true)
 	private String name;
 	
 	@OneToMany(mappedBy="from")
@@ -36,7 +33,7 @@ public class Destination{
 	
 	@OneToMany(mappedBy="to")
 	private Collection<Flight> arrivals;
-	
+		
 	private static final long serialVersionUID = 1L;
 
 	public Destination() {
@@ -56,5 +53,6 @@ public class Destination{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
    
 }
