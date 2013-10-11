@@ -3,6 +3,7 @@ package resource;
 import java.net.URI;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -59,6 +60,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed({"admin"})
 	public Response addDestination(Destination destination) {
 		super.create(destination);
 		return Response.ok().build();
@@ -68,6 +70,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed({"admin"})
 	public Response editDestination(@PathParam("id") Long id,
 			Destination destination) {
 		super.edit(destination);
@@ -77,6 +80,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@DELETE
 	@Path("tasks/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed({"admin"})
 	public Response deleteDestination(@PathParam("id") Long id) {
 		super.remove(super.find(id));
 		return Response.ok().build();
