@@ -28,8 +28,7 @@ public class EJBExceptionMapper implements ExceptionMapper<EJBException> {
 					.build();
 		}
 
-		return Response.status(Status.INTERNAL_SERVER_ERROR).entity(exception.getCausedByException().getClass().getName())
-				.build();
+		throw exception;
 	}
 
 	private ConstraintViolationException findValidationException(Throwable exception){

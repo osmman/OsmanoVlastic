@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -38,8 +39,13 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@GET
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Destination> getDestinations() {
-		return super.findAll();
+	public Response getDestinations(@HeaderParam("X-Order") String order,
+			@HeaderParam("X-Base") Integer base,
+			@HeaderParam("X-Offset") Integer offset,
+			@HeaderParam("X-Filter") String filter) {
+		List<Destination> destinations = super.findAll(order, base, offset);
+		return Response.ok().header("X-Count-records", super.count())
+				.entity(destinations).build();
 	}
 
 	@GET
