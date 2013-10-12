@@ -39,7 +39,7 @@ public class Resources {
     // use @SuppressWarnings to tell IDE to ignore warnings about field not being referenced directly
     @SuppressWarnings("unused")
     @Produces
-    @PersistenceContext
+    @PersistenceContext(name = "primary")
     private EntityManager em;
 
     @Produces

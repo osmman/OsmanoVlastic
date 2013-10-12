@@ -1,25 +1,30 @@
 <?xml version="1.0"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-   version="3.0">
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
 
-   <!-- Configure login to be HTTP Basic -->
-   <login-config>
-      <auth-method>BASIC</auth-method>
-      <realm-name>ApplicationRealm</realm-name>
-   </login-config>
-   
-   <security-constraint>      
-      <web-resource-collection>
-          <web-resource-name>DeleteUser</web-resource-name>          
-          <url-pattern>/*</url-pattern>
-          <http-method>DELETE</http-method>
-          <http-method>POST</http-method>
-          <http-method>PUT</http-method>
-      </web-resource-collection>
-      <auth-constraint>
-          <role-name>admin</role-name>
-          <role-name>manager</role-name>
-      </auth-constraint>
-  </security-constraint>
+	<!-- Configure login to be HTTP Basic -->
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>ApplicationRealm</realm-name>
+	</login-config>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>DeleteUser</web-resource-name>
+			<url-pattern>/*</url-pattern>
+			<http-method>DELETE</http-method>
+			<http-method>POST</http-method>
+			<http-method>PUT</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+			<role-name>manager</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<context-param>
+		<param-name>resteasy.use.builtin.providers</param-name>
+		<param-value>true</param-value>
+	</context-param>
 </web-app>

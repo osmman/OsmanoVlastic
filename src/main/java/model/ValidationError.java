@@ -7,9 +7,9 @@ public final class ValidationError {
  
     private String message;
  
-    private String messageTemplate;
+    private String root;
  
-    private String path;
+    private String property;
  
     private String invalidValue;
 
@@ -21,20 +21,20 @@ public final class ValidationError {
 		this.message = message;
 	}
 
-	public String getMessageTemplate() {
-		return messageTemplate;
+	public String getRoot() {
+		return root;
 	}
 
-	public void setMessageTemplate(String messageTemplate) {
-		this.messageTemplate = messageTemplate;
+	public void setRoot(String root) {
+		this.root = root;
 	}
 
-	public String getPath() {
-		return path;
+	public String getProperty() {
+		return property;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setProperty(String property) {
+		this.property = property;
 	}
 
 	public String getInvalidValue() {

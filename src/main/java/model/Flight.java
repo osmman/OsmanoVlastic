@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.Float;
 import java.lang.Integer;
 import java.lang.Long;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -15,13 +16,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
-public class Flight implements Serializable {
+public class Flight {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	private Date departure;
+	private Date dateOfDeparture;
 	
 	private Float distance;
 	
@@ -29,14 +30,18 @@ public class Flight implements Serializable {
 	
 	private Float Price;
 	
-	@ManyToOne
-	@JoinColumn(name = "TO_DESTINATION")
+	@ManyToOne(fetch= FetchType.EAGER)
+	@JoinColumn(name = "to_id")
 	private Destination to;
 	
 	
-	@ManyToOne
-	@JoinColumn(name = "FROM_DESTINATION")
+	@ManyToOne(fetch= FetchType.EAGER)
+	@JoinColumn(name = "from_id")
 	private Destination from;
+//	
+//	//@OneToMany
+//	@Transient
+//	private Collection<Reservation> reservations;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -52,12 +57,12 @@ public class Flight implements Serializable {
 		this.id = id;
 	}
 
-	public Date getDeparture() {
-		return this.departure;
+	public Date getDateOfDeparture() {
+		return this.dateOfDeparture;
 	}
 
-	public void setDeparture(Date date) {
-		this.departure = date;
+	public void setDateOfDeparture(Date date) {
+		this.dateOfDeparture = date;
 	}
 
 	public Float getDistance() {

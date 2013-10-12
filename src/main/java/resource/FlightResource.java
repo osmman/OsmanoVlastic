@@ -2,9 +2,12 @@ package resource;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
@@ -22,23 +25,19 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-
-import org.jboss.resteasy.links.AddLinks;
-import org.jboss.resteasy.links.LinkResource;
 
 import model.Destination;
+import model.Flight;
 
-@Path("/destination")
+@Path("/flight")
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-public class DestinationResource extends AbstractFacade<Destination> {
+public class FlightResource extends AbstractFacade<Flight> {
 
-	public DestinationResource() {
-		super(Destination.class);
+	public FlightResource() {
+		super(Flight.class);
 	}
 
 	@Context
@@ -52,49 +51,49 @@ public class DestinationResource extends AbstractFacade<Destination> {
 
 	@GET
 	@Path("/")
-	@AddLinks
-	public Response getDestinations(@HeaderParam("X-Order") String order,
+	public Response getFlights(@HeaderParam("X-Order") String order,
 			@HeaderParam("X-Base") Integer base,
 			@HeaderParam("X-Offset") Integer offset,
 			@HeaderParam("X-Filter") String filter) {
-		Collection<Destination> destinations = super.findAll(order, base, offset);
-		GenericEntity<Collection<Destination>> entity = new GenericEntity<Collection<Destination>>(destinations) {};  
+		Collection<Flight> flight = super.findAll(order, base, offset);
+		GenericEntity<Collection<Flight>> entity = new GenericEntity<Collection<Flight>>(flight) {};  
 		return Response.ok().header("X-Count-records", super.count())
 				.entity(entity).build();
 	}
 
 	@GET
-	@AddLinks
 	@Path("/{id}")
-	@LinkResource
-	public Destination getDestination(@PathParam("id") Long id) {
-		Destination dest = super.find(id);
-		dest.getArrivals();
-		return dest;
+	public Flight getFlight(@PathParam("id") Long id) {
+		return super.find(id);
 	}
 
 	@POST
 	@Path("/")
 	@RolesAllowed({ "admin" })
-	public Response addDestination(Destination destination){
-		super.create(destination);
+	public Response add(Flight flight){
+		super.create(flight);
 		return Response.ok().build();
 	}
 
 	@PUT
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
-	public Response editDestination(@PathParam("id") Long id, Destination values) {
-		Destination orig = super.find(id);
-		orig.setName(values.getName());
-		super.edit(orig);
+	public Response edit(@PathParam("id") Long id, Flight values) {
+//		Flight orig = super.find(id);
+//		orig.setDateOfDeparture(values.getDateOfDeparture());
+//		orig.setDistance(values.getDistance());
+//		orig.setFrom(values.getFrom());
+//		orig.setPrice(values.getPrice());
+//		orig.setSeats(values.getSeats());
+//		orig.setTo(values.getTo());
+//		super.edit(orig);
 		return Response.ok().build();
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
-	public Response deleteDestination(@PathParam("id") Long id) {
+	public Response deleten(@PathParam("id") Long id) {
 		super.remove(super.find(id));
 		return Response.ok().build();
 	}
@@ -108,5 +107,4 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	protected UserTransaction getUserTransaction() {
 		return userTransaction;
 	}
-
 }

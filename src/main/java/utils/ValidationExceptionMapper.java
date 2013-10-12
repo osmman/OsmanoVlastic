@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.ejb.EJBException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -16,32 +15,16 @@ import javax.ws.rs.ext.Provider;
 import model.ValidationError;
 
 @Provider
-public class EJBExceptionMapper implements ExceptionMapper<EJBException> {
+public class ValidationExceptionMapper implements
+		ExceptionMapper<ConstraintViolationException> {
 
 	@Override
-	public Response toResponse(EJBException exception) {
-		ConstraintViolationException validationE = findValidationException(exception);
-		if (validationE != null) {
-			return Response
-					.status(Status.BAD_REQUEST)
-					.entity(handleConstraintViolation(validationE))
-					.build();
-		}
+	public Response toResponse(ConstraintViolationException exception) {
 
-		throw exception;
+		return Response.status(Status.BAD_REQUEST)
+				.entity(handleConstraintViolation(exception)).build();
 	}
 
-	private ConstraintViolationException findValidationException(Throwable exception){
-		while(exception != null){
-			if(exception instanceof ConstraintViolationException){
-				return (ConstraintViolationException) exception;
-			}
-			exception = exception.getCause();
-		}
-		
-		return null;
-	}
-	
 	private List<ValidationError> handleConstraintViolation(
 			ConstraintViolationException cve) {
 		List<ValidationError> errors = new LinkedList<ValidationError>();
@@ -50,9 +33,9 @@ public class EJBExceptionMapper implements ExceptionMapper<EJBException> {
 		for (ConstraintViolation<?> cv : cvs) {
 			ValidationError error = new ValidationError();
 			error.setMessage(cv.getMessage());
-			error.setMessageTemplate(cv.getRootBeanClass().getSimpleName());
+			error.setRoot(cv.getRootBeanClass().getSimpleName());
 			error.setInvalidValue(cv.getInvalidValue().toString());
-			error.setPath(cv.getPropertyPath().toString());
+			error.setProperty(cv.getPropertyPath().toString());
 			errors.add(error);
 		}
 		return errors;
