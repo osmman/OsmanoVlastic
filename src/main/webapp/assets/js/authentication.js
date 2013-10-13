@@ -29,11 +29,13 @@ Authentication = {
 	},
 	signIn : function(name, password) {
 		Authentication.name = name;
-		Authentication.token = Base64.encode(Authentication.name+":"+Authentication.password);
+		Authentication.token = window.btoa(Authentication.name+":"+password);
 	},
 	signOut : function() {
 		Authentication.name = "";
 		Authentication.token = "";
+		$('#destinationPart').hide();
+		Destinations.cleanDestinations();
 	},
 	name : "",
 	token : ""
