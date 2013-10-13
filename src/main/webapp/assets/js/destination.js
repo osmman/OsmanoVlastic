@@ -68,7 +68,7 @@ Destination = {
 		$.ajax({
 			url : "rest/destination/" + id,
 			type : "PUT",
-			data : "{'destination': {'name' : '" + name + "'}}",
+			data : "{'name' : '" + name + "'}",
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
@@ -122,7 +122,7 @@ Destination = {
 		$.ajax({
 			url : "rest/destination/",
 			type : "POST",
-			data : "{'destination': {'name' : " + name + "}}",
+			data : "{'name' : " + name + "}",
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
