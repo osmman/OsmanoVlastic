@@ -45,9 +45,9 @@ Destination = {
 		for (i = 0; i < Destination.destinations.length; i++) {
 			$(
 					'<tr><td class="id">'
-							+ Destination.destinations[i].destination.id
+							+ Destination.destinations[i].id
 							+ '</td><td><input type="text" name="name" class="name" value="'
-							+ Destination.destinations[i].destination.name
+							+ Destination.destinations[i].name
 							+ '" /></td><td><button type="button" class="update btn btn-success">Update</button></td><td><button type="button" class="delete btn btn-danger">Delete</button></td></tr>')
 					.appendTo($('#destinationPart tbody'));
 		}
