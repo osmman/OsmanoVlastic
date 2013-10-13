@@ -35,7 +35,7 @@ Authentication = {
 		Authentication.name = "";
 		Authentication.token = "";
 		$('#destinationPart').hide();
-		Destinations.cleanDestinations();
+		Destination.cleanDestinations();
 	},
 	name : "",
 	token : ""

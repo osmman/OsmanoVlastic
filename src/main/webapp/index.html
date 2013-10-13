@@ -137,20 +137,33 @@ body {
 			</div>
 			<!-- /.navbar -->
 		</div>
-
 		<!-- Destination -->
 		<div id="destinationPart" style="display: none;">
+			<h1>Destinations</h1>
+			<div class="message" style="height: 30px;">
+				
+			</div>
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
-						<th>Id</th>
-						<th>Name</th>
-						<th>Update</th>
+						<th><a class="order" name="id" orderValue="">#</a></th>
+						<th><a class="order" name="name" orderValue="">Name</a></th>
+						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
+			<div class="row">
+				<div class="column-2"><label>Count</label><input type="text" class="input-small" value="0" id="destinationCount" /></div>
+				<div class="column-2"><label>Offset</label><input type="text" class="input-small" value="0" id="destinationOffset" /></div>
+			</div>
+			<h2>Create Destination</h2>
+			<form class="form-inline">
+				<input type="text" placeholder="name" id="destinationName" required="">
+				<button type="submit" class="btn btn-primary" id="destinationCreate">Create</button>
+			</form>
 		</div>
 
 
@@ -164,8 +177,7 @@ body {
 	</div>
 	<!-- /container -->
 
-	<script type="text/javascript"
-		src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript" src="assets/js/jquery.rest.min.js"></script>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="assets/js/authentication.js"></script>
@@ -180,10 +192,23 @@ body {
 			$('#authenticationSignOut').bind('click', function() {
 				Authentication.signOutSubmit();
 			});
-			
+
 			$('#destinationLink').bind('click', function() {
 				Destination.open();
 			});
+			$('#destinationCreate').bind('click', function(e) {
+				Destination.createSubmit(e);
+			});
+			$('#destinationPart thead th a').bind('click', function(){
+				Destination.orderDestinatios(this);
+			});
+			$('#destinationCount').bind('change', function(){
+				Destination.getDestinations();
+			});
+			$('#destinationOffset').bind('change', function(){
+				Destination.getDestinations();
+			});
+			
 		});
 	</script>
 </body>
