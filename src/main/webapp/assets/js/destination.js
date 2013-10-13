@@ -13,12 +13,16 @@ Destination = {
 		element = $(e);
 		if (element.attr('orderValue').length == 0 || element.attr('orderValue') == 'asc') {
 			$('#destinationPart th a').attr('orderValue','');
+			$('#destinationPart th i').attr('class', '');
 			element.attr('orderValue', 'desc');
 			Destination.order = element.attr('name')+":desc";
+			element.find('i').attr('class', 'icon-chevron-up');
 		} else {
 			$('#destinationPart th a').attr('orderValue','');
+			$('#destinationPart th i').attr('class', '');
 			element.attr('orderValue', 'asc');
 			Destination.order = element.attr('name')+":asc";
+			element.find('i').attr('class', 'icon-chevron-down');
 		}
 		Destination.getDestinations();
 	},
@@ -48,7 +52,7 @@ Destination = {
 							+ Destination.destinations[i].id
 							+ '</td><td><input type="text" name="name" class="name" value="'
 							+ Destination.destinations[i].name
-							+ '" /></td><td><button type="button" class="update btn btn-success">Update</button></td><td><button type="button" class="delete btn btn-danger">Delete</button></td></tr>')
+							+ '" /></td><td><button type="button" class="update btn btn-success">Update</button><button type="button" class="delete btn btn-danger">Delete</button></td></tr>')
 					.appendTo($('#destinationPart tbody'));
 		}
 		$('#destinationPart tbody td .update').bind('click', function() {
