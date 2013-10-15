@@ -88,6 +88,10 @@ body {
 	border-right: 0;
 	border-radius: 0 3px 3px 0;
 }
+
+.order i{
+	margin-left: 3px;
+}
 </style>
 </head>
 <body>
@@ -137,20 +141,32 @@ body {
 			</div>
 			<!-- /.navbar -->
 		</div>
-
 		<!-- Destination -->
 		<div id="destinationPart" style="display: none;">
+			<h1>Destinations</h1>
+			<div class="message" style="height: 30px;">
+				
+			</div>
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
-						<th>Id</th>
-						<th>Name</th>
-						<th>Update</th>
+						<th><a class="order" name="id" orderValue="">#<i></i></a></th>
+						<th><a class="order" name="name" orderValue="">Name<i></i></a></th>
+						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 				</tbody>
 			</table>
+			<div class="row form-horizontal">
+				<div class="span5 control-group"><label class="control-label">Count</label><div class="controls"><input type="text" class="input-small" value="0" id="destinationCount" /></div></div>
+				<div class="span4 control-group"><label class="control-label">Offset</label><div class="controls"><input type="text" class="input-small" value="0" id="destinationOffset" /></div></div>
+			</div>
+			<h2>Create Destination</h2>
+			<form class="form-inline">
+				<input type="text" placeholder="name" id="destinationName" required="">
+				<button type="submit" class="btn btn-primary" id="destinationCreate">Create</button>
+			</form>
 		</div>
 
 
@@ -164,8 +180,7 @@ body {
 	</div>
 	<!-- /container -->
 
-	<script type="text/javascript"
-		src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript" src="assets/js/jquery.rest.min.js"></script>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="assets/js/authentication.js"></script>
@@ -180,10 +195,23 @@ body {
 			$('#authenticationSignOut').bind('click', function() {
 				Authentication.signOutSubmit();
 			});
-			
+
 			$('#destinationLink').bind('click', function() {
 				Destination.open();
 			});
+			$('#destinationCreate').bind('click', function(e) {
+				Destination.createSubmit(e);
+			});
+			$('#destinationPart thead th a').bind('click', function(){
+				Destination.orderDestinatios(this);
+			});
+			$('#destinationCount').bind('change', function(){
+				Destination.getDestinations();
+			});
+			$('#destinationOffset').bind('change', function(){
+				Destination.getDestinations();
+			});
+			
 		});
 	</script>
 </body>
