@@ -1,4 +1,4 @@
-package model;
+package core.message;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

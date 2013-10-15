@@ -25,7 +25,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.xml.bind.JAXBElement;
 
+import core.mapper.FlightMapper;
+import core.resource.AbstractFacade;
 import model.Destination;
 import model.Flight;
 
@@ -70,23 +73,18 @@ public class FlightResource extends AbstractFacade<Flight> {
 	@POST
 	@Path("/")
 	@RolesAllowed({ "admin" })
-	public Response add(Flight flight){
-		super.create(flight);
+	public Response add(FlightMapper mapper){
+		super.create(mapper.getValue());
 		return Response.ok().build();
 	}
-
+	
 	@PUT
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
-	public Response edit(@PathParam("id") Long id, Flight values) {
-//		Flight orig = super.find(id);
-//		orig.setDateOfDeparture(values.getDateOfDeparture());
-//		orig.setDistance(values.getDistance());
-//		orig.setFrom(values.getFrom());
-//		orig.setPrice(values.getPrice());
-//		orig.setSeats(values.getSeats());
-//		orig.setTo(values.getTo());
-//		super.edit(orig);
+	public Response edit(@PathParam("id") Long id, FlightMapper mapper) {
+		Flight flight = mapper.getValue();
+		flight.setId(id);
+		super.edit(flight);
 		return Response.ok().build();
 	}
 

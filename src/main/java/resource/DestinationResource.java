@@ -28,6 +28,7 @@ import javax.ejb.TransactionManagementType;
 import org.jboss.resteasy.links.AddLinks;
 import org.jboss.resteasy.links.LinkResource;
 
+import core.resource.AbstractFacade;
 import model.Destination;
 
 @Path("/destination")
@@ -52,7 +53,6 @@ public class DestinationResource extends AbstractFacade<Destination> {
 
 	@GET
 	@Path("/")
-	@AddLinks
 	public Response getDestinations(@HeaderParam("X-Order") String order,
 			@HeaderParam("X-Base") Integer base,
 			@HeaderParam("X-Offset") Integer offset,
@@ -64,9 +64,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	}
 
 	@GET
-	@AddLinks
 	@Path("/{id}")
-	@LinkResource
 	public Destination getDestination(@PathParam("id") Long id) {
 		Destination dest = super.find(id);
 		dest.getArrivals();

@@ -1,4 +1,4 @@
-package utils;
+package core.ejb.mapper;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,13 +6,12 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import model.ValidationError;
+import core.message.ValidationError;
 
 @Provider
 public class ValidationExceptionMapper implements

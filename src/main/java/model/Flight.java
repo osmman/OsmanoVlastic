@@ -8,7 +8,11 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import core.resource.UrlResource;
 
 /**
  * Entity implementation class for Entity: Flight
@@ -16,11 +20,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @XmlRootElement
-public class Flight {
+public class Flight extends UrlResource {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	@NotNull
+	@Size(min = 1, max = 255)
+	@Column(unique = true)
+	private String name;
 	
 	private Date dateOfDeparture;
 	
@@ -28,7 +37,7 @@ public class Flight {
 	
 	private Integer seats;
 	
-	private Float Price;
+	private Float price;
 	
 	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name = "to_id")
@@ -82,11 +91,11 @@ public class Flight {
 	}
 
 	public Float getPrice() {
-		return this.Price;
+		return this.price;
 	}
 
 	public void setPrice(Float Price) {
-		this.Price = Price;
+		this.price = Price;
 	}
 
 	public Destination getTo() {
@@ -105,4 +114,16 @@ public class Flight {
 		this.from = from;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@PostLoad
+	protected void loadUrl(){
+		super.loadUrl();
+	}
 }

@@ -8,28 +8,34 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.jboss.resteasy.annotations.providers.jaxb.json.Mapped;
-import org.jboss.resteasy.annotations.providers.jaxb.json.XmlNsMap;
+import org.jboss.resteasy.spi.touri.ObjectToURI;
+import org.jboss.resteasy.spi.touri.URITemplate;
+
+import javax.xml.bind.annotation.adapters.*;
+
+//import org.jboss.resteasy.annotations.providers.jaxb.json.Mapped;
+//import org.jboss.resteasy.annotations.providers.jaxb.json.XmlNsMap;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.jboss.resteasy.links.RESTServiceDiscovery;
+
+import core.resource.UrlResource;
 
 /**
  * Entity implementation class for Entity: Destinantion
  * 
  */
 @Entity
-@XmlRootElement(name = "destination")
-@Mapped(namespaceMap = @XmlNsMap(jsonName = "atom", namespace = "http://www.w3.org/2005/Atom"))
-public class Destination {
+@XmlRootElement
+public class Destination extends UrlResource {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private Long id;
 
 	@NotNull
@@ -77,9 +83,9 @@ public class Destination {
 	public Collection<Flight> getDepartures() {
 		return departures;
 	}
-
-	@Transient
-	@XmlElementRef
-	private RESTServiceDiscovery rest;
 	
+	@PostLoad
+	protected void loadUrl(){
+		super.loadUrl();
+	}
 }

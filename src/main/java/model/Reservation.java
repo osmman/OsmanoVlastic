@@ -27,7 +27,7 @@ public class Reservation implements Serializable {
 	private Date created;
 	@Enumerated(EnumType.STRING)
 	private StateChoices state;
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Flight flight;
 
 	private static final long serialVersionUID = 1L;

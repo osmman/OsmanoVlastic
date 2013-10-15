@@ -22,9 +22,4 @@
 			<role-name>manager</role-name>
 		</auth-constraint>
 	</security-constraint>
-
-	<context-param>
-		<param-name>resteasy.use.builtin.providers</param-name>
-		<param-value>true</param-value>
-	</context-param>
 </web-app>

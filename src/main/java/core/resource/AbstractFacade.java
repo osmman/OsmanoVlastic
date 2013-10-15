@@ -1,15 +1,13 @@
-package resource;
+package core.resource;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.UserTransaction;
 
-import utils.QueryBuilder;
-import model.UrlResource;
+import core.QueryBuilder;
 
 public abstract class AbstractFacade<T> {
 
