@@ -57,8 +57,11 @@ public class DestinationResource extends AbstractFacade<Destination> {
 			@HeaderParam("X-Base") Integer base,
 			@HeaderParam("X-Offset") Integer offset,
 			@HeaderParam("X-Filter") String filter) {
-		Collection<Destination> destinations = super.findAll(order, base, offset);
-		GenericEntity<Collection<Destination>> entity = new GenericEntity<Collection<Destination>>(destinations) {};  
+		Collection<Destination> destinations = super.findAll(order, base,
+				offset);
+		GenericEntity<Collection<Destination>> entity = new GenericEntity<Collection<Destination>>(
+				destinations) {
+		};
 		return Response.ok().header("X-Count-records", super.count())
 				.entity(entity).build();
 	}
@@ -74,7 +77,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@POST
 	@Path("/")
 	@RolesAllowed({ "admin" })
-	public Response add(Destination destination){
+	public Response add(Destination destination) {
 		super.create(destination);
 		return Response.ok().build();
 	}
@@ -84,8 +87,10 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@RolesAllowed({ "admin" })
 	public Response edit(@PathParam("id") Long id, Destination values) {
 		Destination orig = super.find(id);
-		orig.setName(values.getName());
-		super.edit(orig);
+		if (orig != null) {
+			values.setId(id);
+		}
+		super.edit(values);
 		return Response.ok().build();
 	}
 

@@ -7,6 +7,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.UserTransaction;
 
+import model.Destination;
 import core.QueryBuilder;
 
 public abstract class AbstractFacade<T> {

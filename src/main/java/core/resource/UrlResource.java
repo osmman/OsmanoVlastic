@@ -2,7 +2,6 @@ package core.resource;
 
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -16,6 +15,7 @@ public abstract class UrlResource {
 	
 	public abstract Long getId();
 	
+	@XmlElement
 	public String getUrl() {
 		return url;
 	}
