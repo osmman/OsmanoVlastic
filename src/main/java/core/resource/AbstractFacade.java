@@ -18,8 +18,6 @@ public abstract class AbstractFacade<T> {
 	}
 
 	protected abstract EntityManager getEntityManager();
-
-	protected abstract UserTransaction getUserTransaction();
 	
 	public void create(T entity){
 		getEntityManager().persist(entity);

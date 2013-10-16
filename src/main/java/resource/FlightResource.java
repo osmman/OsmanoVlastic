@@ -95,14 +95,15 @@ public class FlightResource extends AbstractFacade<Flight> {
 		super.remove(super.find(id));
 		return Response.ok().build();
 	}
+	
+	@Path("/{id}/reservation")
+	public ReservationResource getReservationResource(@PathParam("id") Long id){
+		return new ReservationResource(super.find(id));
+	}
 
 	@Override
 	protected EntityManager getEntityManager() {
 		return em;
 	}
 
-	@Override
-	protected UserTransaction getUserTransaction() {
-		return userTransaction;
-	}
 }
