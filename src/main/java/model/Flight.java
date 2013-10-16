@@ -11,6 +11,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import core.resource.UrlResource;
 
@@ -47,10 +50,9 @@ public class Flight extends UrlResource {
 	@ManyToOne(fetch= FetchType.EAGER)
 	@JoinColumn(name = "from_id")
 	private Destination from;
-//	
-//	//@OneToMany
-//	@Transient
-//	private Collection<Reservation> reservations;
+	
+	@OneToMany(fetch=FetchType.LAZY)
+	private Collection<Reservation> reservations;
 	
 	private static final long serialVersionUID = 1L;
 
@@ -122,8 +124,14 @@ public class Flight extends UrlResource {
 		this.name = name;
 	}
 	
+	@JsonIgnore
+	@XmlTransient
+	public Collection<Reservation> getReservations() {
+		return reservations;
+	}
+
 	@PostLoad
-	protected void loadUrl(){
+	public void loadUrl(){
 		super.loadUrl();
 	}
 }

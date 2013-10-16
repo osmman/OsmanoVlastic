@@ -2,6 +2,7 @@ package resource;
 
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -29,16 +30,15 @@ import model.Flight;
 import model.Reservation;
 import core.resource.AbstractFacade;
 
-@RequestScoped
+@Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class ReservationResource extends AbstractFacade<Reservation> {
 
-	public ReservationResource(Flight flight) {
+	public ReservationResource() {
 		super(Reservation.class);
-		this.flight = flight;
 	}
-	
-	private Flight flight;
 
 	@Context
 	UriInfo uriInfo;
@@ -46,16 +46,19 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 	@Inject
 	private EntityManager em;
 
-	@Inject
-	private UserTransaction userTransaction;
-
 	@GET
 	@Path("/")
 	public Response getReservations(@HeaderParam("X-Order") String order,
 			@HeaderParam("X-Base") Integer base,
 			@HeaderParam("X-Offset") Integer offset,
-			@HeaderParam("X-Filter") String filter) {
-		Collection<Reservation> reservations = super.findAll(order, base, offset);
+			@HeaderParam("X-Filter") String filter,
+			@PathParam("flightId") Long flightId) {
+		/**
+		 * @todo filtrovat dotaz 
+		 * findAll(order, base, offset);
+		 */
+		Flight flight = em.find(Flight.class, flightId);
+		Collection<Reservation> reservations = flight.getReservations();
 		GenericEntity<Collection<Reservation>> entity = new GenericEntity<Collection<Reservation>>(reservations) {};  
 		return Response.ok().header("X-Count-records", super.count())
 				.entity(entity).build();
@@ -96,6 +99,10 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 	@Override
 	protected EntityManager getEntityManager() {
 		return em;
+	}
+	
+	@PostConstruct
+	private void loadFlight(){
 	}
 
 }

@@ -85,7 +85,7 @@ public class Destination extends UrlResource {
 	}
 	
 	@PostLoad
-	protected void loadUrl(){
+	public void loadUrl(){
 		super.loadUrl();
 	}
 }

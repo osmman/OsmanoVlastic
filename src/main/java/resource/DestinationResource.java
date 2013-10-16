@@ -21,6 +21,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.Consumes;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -48,8 +49,8 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@Inject
 	private EntityManager em;
 
-	@Inject
-	private UserTransaction userTransaction;
+	// @Inject
+	// private UserTransaction userTransaction;
 
 	@GET
 	@Path("/")
@@ -79,27 +80,31 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@RolesAllowed({ "admin" })
 	public Response add(Destination destination) {
 		super.create(destination);
-		return Response.ok().build();
+		return Response.status(Status.CREATED)
+				.header("Locale", destination.getUrl()).build();
 	}
 
 	@PUT
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
 	public Response edit(@PathParam("id") Long id, Destination values) {
-		Destination orig = super.find(id);
-		if (orig != null) {
-			values.setId(id);
-		}
+		values.setId(id);
 		super.edit(values);
-		return Response.ok().build();
+		values.loadUrl();
+		return Response.status(Status.NO_CONTENT)
+				.header("Locale:", values.getUrl()).build();
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
 	public Response delete(@PathParam("id") Long id) {
-		super.remove(super.find(id));
-		return Response.ok().build();
+		Destination item = super.find(id);
+		if (item == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		super.remove(item);
+		return Response.status(Status.NO_CONTENT).build();
 	}
 
 	@Override

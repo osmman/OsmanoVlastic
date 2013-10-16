@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -24,12 +25,11 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.Consumes;
-import javax.xml.bind.JAXBElement;
 
 import core.mapper.FlightMapper;
 import core.resource.AbstractFacade;
-import model.Destination;
 import model.Flight;
 
 @Path("/flight")
@@ -48,9 +48,12 @@ public class FlightResource extends AbstractFacade<Flight> {
 
 	@Inject
 	private EntityManager em;
-
-	@Inject
-	private UserTransaction userTransaction;
+	
+	@EJB
+	private ReservationResource reservation;
+	
+	//@Inject
+	//private UserTransaction userTransaction;
 
 	@GET
 	@Path("/")
@@ -74,8 +77,10 @@ public class FlightResource extends AbstractFacade<Flight> {
 	@Path("/")
 	@RolesAllowed({ "admin" })
 	public Response add(FlightMapper mapper){
-		super.create(mapper.getValue());
-		return Response.ok().build();
+		Flight flight = mapper.getValue();
+		super.create(flight);
+		return Response.status(Status.CREATED)
+				.header("Locale", flight.getUrl()).build();
 	}
 	
 	@PUT
@@ -85,20 +90,26 @@ public class FlightResource extends AbstractFacade<Flight> {
 		Flight flight = mapper.getValue();
 		flight.setId(id);
 		super.edit(flight);
-		return Response.ok().build();
+		flight.loadUrl();
+		return Response.status(Status.NO_CONTENT)
+				.header("Locale:", flight.getUrl()).build();
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
 	public Response deleten(@PathParam("id") Long id) {
-		super.remove(super.find(id));
-		return Response.ok().build();
+		Flight item = super.find(id);
+		if (item == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		super.remove(item);
+		return Response.status(Status.NO_CONTENT).build();
 	}
 	
-	@Path("/{id}/reservation")
-	public ReservationResource getReservationResource(@PathParam("id") Long id){
-		return new ReservationResource(super.find(id));
+	@Path("/{flightId}/reservation")
+	public ReservationResource getReservationResource(){
+		return reservation;
 	}
 
 	@Override

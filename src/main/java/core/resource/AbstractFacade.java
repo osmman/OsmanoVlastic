@@ -22,6 +22,8 @@ public abstract class AbstractFacade<T> {
 	
 	public void create(T entity){
 		getEntityManager().persist(entity);
+		getEntityManager().flush();
+		getEntityManager().refresh(entity);
 	}
 
 	public void edit(T entity) {
@@ -44,6 +46,10 @@ public abstract class AbstractFacade<T> {
 		builder.setOffset(offset);
 		Query q = builder.build();
 		return  q.getResultList();
+	}
+	
+	public boolean contains(T entity){
+		return this.getEntityManager().contains(entity);
 	}
 
 	public int count() {
