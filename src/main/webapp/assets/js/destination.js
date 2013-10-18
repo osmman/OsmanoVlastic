@@ -5,8 +5,8 @@
 Destination = {
 	open : function() {
 		// hide other
-		// $('#otherPart').hide();
 		$('#destinationPart').show();
+		$('#flightPart').hide();
 		Destination.getDestinations();
 	},
 	orderDestinatios : function(e) {
@@ -44,6 +44,24 @@ Destination = {
 			}
 		});
 	},
+	getDestinationsAndCallback : function(callback) {
+		$.ajax({
+			url : "rest/destination",
+			type : "GET",
+			beforeSend : function(request) {
+				request.setRequestHeader('Authorization', 'Basic '
+						+ Authentication.token);
+				request.setRequestHeader('Accept', 'application/json');
+				request.setRequestHeader('X-Base', $('#destinationCount').val());
+				request.setRequestHeader('X-Offset', $('#destinationOffset').val());
+				request.setRequestHeader('X-Order', Destination.order);
+			},
+			success : function(data) {
+				Destination.destinations = data;
+				callback();
+			}
+		});
+	},
 	displayDestinations : function() {
 		Destination.cleanDestinations();
 		for (i = 0; i < Destination.destinations.length; i++) {
@@ -52,7 +70,7 @@ Destination = {
 							+ Destination.destinations[i].id
 							+ '</td><td><input type="text" name="name" class="name" value="'
 							+ Destination.destinations[i].name
-							+ '" /></td><td><button type="button" class="update btn btn-success">Update</button><button type="button" class="delete btn btn-danger">Delete</button></td></tr>')
+							+ '" /></td><td><button type="button" class="update btn btn-success"><i class="icon-edit icon-white" /></button> <button type="button" class="delete btn btn-danger"><i class="icon-remove icon-white" /></button></td></tr>')
 					.appendTo($('#destinationPart tbody'));
 		}
 		$('#destinationPart tbody td .update').bind('click', function() {
@@ -72,7 +90,7 @@ Destination = {
 		$.ajax({
 			url : "rest/destination/" + id,
 			type : "PUT",
-			data : "{'name' : '" + name + "'}",
+			data : '{"name" : "' + name + '"}',
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
@@ -126,7 +144,7 @@ Destination = {
 		$.ajax({
 			url : "rest/destination/",
 			type : "POST",
-			data : "{'name' : " + name + "}",
+			data : '{"name" : "' + name + '"}',
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
