@@ -51,7 +51,7 @@ public class Flight extends UrlResource {
 	@JoinColumn(name = "from_id")
 	private Destination from;
 	
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(fetch=FetchType.EAGER)
 	private Collection<Reservation> reservations;
 	
 	private static final long serialVersionUID = 1L;

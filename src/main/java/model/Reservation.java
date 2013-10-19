@@ -12,15 +12,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 import model.Flight;
 import model.StateChoices;
 
+import core.resource.UrlResource;
+
 /**
  * Entity implementation class for Entity: Reservation
  * 
  */
 @Entity
 @XmlRootElement
-public class Reservation implements Serializable {
+public class Reservation extends UrlResource {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private Integer seats;
 	private String password;

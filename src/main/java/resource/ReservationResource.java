@@ -25,11 +25,13 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import model.Flight;
 import model.Reservation;
 import core.resource.AbstractFacade;
 
+@Path("/flight/{flightId}/reservation")
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -60,23 +62,27 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 		Flight flight = em.find(Flight.class, flightId);
 		Collection<Reservation> reservations = flight.getReservations();
 		GenericEntity<Collection<Reservation>> entity = new GenericEntity<Collection<Reservation>>(reservations) {};  
-		return Response.ok().header("X-Count-records", super.count())
+		return Response.ok(entity).header("X-Count-records", super.count())
 				.entity(entity).build();
 	}
 
 	@GET
 	@Path("/{id}")
-	public Reservation getReservation(@PathParam("id") Long id) {
+	public Response getReservation(@PathParam("id") Long id) {
 		Reservation item = super.find(id);
-		return item;
+		return Response.status(Status.OK)
+				.entity(item).build();
 	}
 
 	@POST
 	@Path("/")
 	@RolesAllowed({ "admin" })
-	public Response add(Reservation destination){
-		super.create(destination);
-		return Response.ok().build();
+	public Response add(@PathParam("flightId") Long flightId, Reservation reservation){
+		Flight flight = em.find(Flight.class, flightId);
+		reservation.setFlight(flight);
+		super.create(reservation);
+		return Response.status(Status.CREATED)
+				.header("Locale", reservation.getUrl(this.uriInfo)).build();
 	}
 
 	@PUT

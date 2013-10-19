@@ -80,7 +80,7 @@ public class FlightResource extends AbstractFacade<Flight> {
 		Flight flight = mapper.getValue();
 		super.create(flight);
 		return Response.status(Status.CREATED)
-				.header("Locale", flight.getUrl()).build();
+				.header("Locale", flight.getUrl(this.uriInfo)).build();
 	}
 	
 	@PUT
@@ -92,7 +92,7 @@ public class FlightResource extends AbstractFacade<Flight> {
 		super.edit(flight);
 		flight.loadUrl();
 		return Response.status(Status.NO_CONTENT)
-				.header("Locale:", flight.getUrl()).build();
+				.header("Locale:", flight.getUrl(this.uriInfo)).build();
 	}
 
 	@DELETE

@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+<title>Hello World</title>
+<style type="text/css">
+body {
+	padding-top: 20px;
+	padding-bottom: 60px;
+}
+
+/* Custom container */
+.container {
+	margin: 0 auto;
+	max-width: 1000px;
+}
+
+.container>hr {
+	margin: 60px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+	margin: 80px 0;
+	text-align: center;
+}
+
+.jumbotron h1 {
+	font-size: 100px;
+	line-height: 1;
+}
+
+.jumbotron .lead {
+	font-size: 24px;
+	line-height: 1.25;
+}
+
+.jumbotron .btn {
+	font-size: 21px;
+	padding: 14px 24px;
+}
+
+/* Supporting marketing content */
+.marketing {
+	margin: 60px 0;
+}
+
+.marketing p+h4 {
+	margin-top: 28px;
+}
+
+/* Customize the navbar links to be fill the entire space of the .navbar */
+.navbar .navbar-inner {
+	padding: 0;
+}
+
+.navbar .nav {
+	margin: 0;
+	display: table;
+	width: 100%;
+}
+
+.navbar .nav li {
+	display: table-cell;
+	width: 1%;
+	float: none;
+}
+
+.navbar .nav li a {
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid rgba(255, 255, 255, .75);
+	border-right: 1px solid rgba(0, 0, 0, .1);
+}
+
+.navbar .nav li:first-child a {
+	border-left: 0;
+	border-radius: 3px 0 0 3px;
+}
+
+.navbar .nav li:last-child a {
+	border-right: 0;
+	border-radius: 0 3px 3px 0;
+}
+
+.order i{
+	margin-left: 3px;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+
+		<div class="masthead">
+			<div class="container">
+				<h3 class="muted pull-left">OsmanVlastič</h3>
+				<div class="pull-right">
+					<div id="signIn" style="margin-top: 10px;">
+						<form class="form-inline">
+							<input type="text" class="input-small" placeholder="name"
+								id="authenticationName" required> <input type="password"
+								class="input-small" placeholder="password"
+								id="authenticationPassword" required>
+							<button type="submit" class="btn btn-primary"
+								id="authenticationSignIn">Sign In</button>
+						</form>
+					</div>
+					<div id="signOut" style="display: none; margin-top: 25px;">
+						<span> You are sign in as <strong
+							id="authenticationSignetUser"></strong>.
+						</span> <a href="#" id="authenticationSignOut">Sign Out</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container" id="body-unautorized">
+		<div class="jumbotron">
+			<h1>OsmanVlastič Js client!</h1>
+			<p class="lead">To access the application please Sign in.</p>
+		</div>
+	</div>
+	<div class="container" id="body" style="display: none;">
+		<div class="masthead">
+			<div class="navbar">
+				<div class="navbar-inner">
+					<div class="container">
+						<ul class="nav">
+							<li><a id="destinationLink" href="#">Destination</a></li>
+							<li><a id="flightLink" href="#">Fly</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- /.navbar -->
+		</div>
+		<!-- Destination -->
+		<div id="destinationPart" style="display: none;">
+			<h1>Destinations</h1>
+			<div class="message" style="height: 30px;">
+				
+			</div>
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th><a class="order" name="id" orderValue="">#<i></i></a></th>
+						<th><a class="order" name="name" orderValue="">Name<i></i></a></th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<div class="row form-horizontal">
+				<div class="span5 control-group"><label class="control-label">Count</label><div class="controls"><input type="text" class="input-small" value="0" id="destinationCount" /></div></div>
+				<div class="span4 control-group"><label class="control-label">Offset</label><div class="controls"><input type="text" class="input-small" value="0" id="destinationOffset" /></div></div>
+			</div>
+			<h2>Create Destination</h2>
+			<form class="form-inline">
+				<input type="text" placeholder="name" id="destinationName" required="">
+				<button type="submit" class="btn btn-primary" id="destinationCreate">Create</button>
+			</form>
+		</div>
+		
+		<!-- Flights -->
+		<div id="flightPart" style="display: none;">
+			<h1>Flights</h1>
+			<div class="message" style="height: 30px;">
+				
+			</div>
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th><a class="order" name="id" orderValue="">#<i></i></a></th>
+						<th><a class="order" name="dateOfDeparture" orderValue="">Date<i></i></a></th>
+						<th><a class="order" name="name" orderValue="">Name<i></i></a></th>
+						<th><a class="order" name="from" orderValue="">From<i></i></a></th>
+						<th><a class="order" name="to" orderValue="">To<i></i></a></th>
+						<th><a class="order" name="seats" orderValue="">Seats<i></i></a></th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<div class="row form-horizontal">
+				<div class="span5 control-group"><label class="control-label">Count</label><div class="controls"><input type="text" class="input-small" value="0" id="flightCount" /></div></div>
+				<div class="span4 control-group"><label class="control-label">Offset</label><div class="controls"><input type="text" class="input-small" value="0" id="flightOffset" /></div></div>
+			</div>
+			<h2>Create Flight</h2>
+			<form class="form-inline">
+				<input type="text" placeholder="date of departure" id="flightDateOfDeparture" class="input-small" required="">
+				<input type="text" placeholder="name" id="flightName" class="input-small" required="">
+				<select name="flightFrom" id="flightFrom">
+					<option selected="selected" disabled="disabled"></option>
+				</select>
+				<select name="flightTo" id="flightTo">
+					<option selected="selected" disabled="disabled"></option>
+				</select>
+				<input type="text" placeholder="seats" id="flightSeats" class="input-small" required="">
+				<button type="submit" class="btn btn-primary" id="flightCreate">Create</button>
+			</form>
+		</div>
+
+
+	</div>
+	<div class="container">
+		<hr />
+		<div class="footer">
+			<p>&copy; Company 2013</p>
+		</div>
+
+	</div>
+	<!-- /container -->
+
+	<script type="text/javascript" src="assets/js/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="assets/js/date.js"></script>
+	<script type="text/javascript" src="assets/js/authentication.js"></script>
+	<script type="text/javascript" src="assets/js/destination.js"></script>
+	<script type="text/javascript" src="assets/js/flight.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#authenticationSignIn').bind('click', function(e) {
+				Authentication.signInSubmit(e);
+			});
+
+			$('#authenticationSignOut').bind('click', function() {
+				Authentication.signOutSubmit();
+			});
+
+			
+			$('#destinationLink').bind('click', function() {
+				Destination.open();
+			});
+			$('#destinationCreate').bind('click', function(e) {
+				Destination.createSubmit(e);
+			});
+			$('#destinationPart thead th a').bind('click', function(){
+				Destination.orderDestinatios(this);
+			});
+			$('#destinationCount').bind('change', function(){
+				Destination.getDestinations();
+			});
+			$('#destinationOffset').bind('change', function(){
+				Destination.getDestinations();
+			});
+			
+			
+			$('#flightLink').bind('click', function() {
+				Flight.open();
+			});
+			$('#flightCreate').bind('click', function(e) {
+				Flight.createSubmit(e);
+			});
+			$('#flightPart thead th a').bind('click', function(){
+				Flight.orderFlights(this);
+			});
+			$('#flightCount').bind('change', function(){
+				Flight.getFlights();
+			});
+			$('#flightOffset').bind('change', function(){
+				Flight.getFlights();
+			});
+			
+		});
+	</script>
+</body>
+</html>

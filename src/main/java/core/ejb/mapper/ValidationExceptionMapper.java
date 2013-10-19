@@ -17,7 +17,6 @@ import core.message.ValidationError;
 public class ValidationExceptionMapper implements
 		ExceptionMapper<ConstraintViolationException> {
 
-	@Override
 	public Response toResponse(ConstraintViolationException exception) {
 
 		return Response.status(Status.BAD_REQUEST)

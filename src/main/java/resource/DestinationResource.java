@@ -81,7 +81,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	public Response add(Destination destination) {
 		super.create(destination);
 		return Response.status(Status.CREATED)
-				.header("Locale", destination.getUrl()).build();
+				.header("Locale", destination.getUrl(this.uriInfo)).build();
 	}
 
 	@PUT
@@ -92,7 +92,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 		super.edit(values);
 		values.loadUrl();
 		return Response.status(Status.NO_CONTENT)
-				.header("Locale:", values.getUrl()).build();
+				.header("Locale:", values.getUrl(this.uriInfo)).build();
 	}
 
 	@DELETE

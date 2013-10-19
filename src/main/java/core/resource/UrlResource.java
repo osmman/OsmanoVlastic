@@ -1,6 +1,7 @@
 package core.resource;
 
 import javax.persistence.Transient;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -16,8 +17,8 @@ public abstract class UrlResource {
 	public abstract Long getId();
 	
 	@XmlElement
-	public String getUrl() {
-		return url;
+	public String getUrl(UriInfo uriInfo) {
+		return uriInfo.getPath()+"/"+getId();
 	}
 
 	@JsonIgnore
