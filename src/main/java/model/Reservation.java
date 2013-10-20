@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.lang.Integer;
 import java.lang.Long;
 import java.lang.String;
+import java.sql.Time;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.ws.rs.DefaultValue;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import model.Flight;
@@ -30,6 +32,7 @@ public class Reservation extends UrlResource {
 	private Date created;
 	@Enumerated(EnumType.STRING)
 	private StateChoices state;
+	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Flight flight;
 
@@ -86,5 +89,5 @@ public class Reservation extends UrlResource {
 	public void setState(StateChoices state) {
 		this.state = state;
 	}
-
+	
 }

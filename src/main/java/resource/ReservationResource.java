@@ -1,6 +1,7 @@
 package resource;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
@@ -27,8 +28,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
+import org.jboss.logging.MDC;
+
 import model.Flight;
 import model.Reservation;
+import model.StateChoices;
 import core.resource.AbstractFacade;
 
 @Path("/flight/{flightId}/reservation")
@@ -62,7 +66,7 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 		Flight flight = em.find(Flight.class, flightId);
 		Collection<Reservation> reservations = flight.getReservations();
 		GenericEntity<Collection<Reservation>> entity = new GenericEntity<Collection<Reservation>>(reservations) {};  
-		return Response.ok(entity).header("X-Count-records", super.count())
+		return Response.ok().header("X-Count-records", super.count())
 				.entity(entity).build();
 	}
 
@@ -79,18 +83,31 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 	@RolesAllowed({ "admin" })
 	public Response add(@PathParam("flightId") Long flightId, Reservation reservation){
 		Flight flight = em.find(Flight.class, flightId);
+		int count = 0;
+		for (Reservation r : flight.getReservations()) {
+			count += r.getSeats();
+		}
+		if (flight.getSeats() < count + reservation.getSeats()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 		reservation.setFlight(flight);
+		Date d = new Date();
+		reservation.setCreated(d);
+		reservation.setPassword("passwd");
+		reservation.setState(StateChoices.NEW);
 		super.create(reservation);
 		return Response.status(Status.CREATED)
-				.header("Locale", reservation.getUrl(this.uriInfo)).build();
+				.header("Locale", reservation.getUrl(this.uriInfo)).header("password", reservation.getPassword()).build();
 	}
 
 	@PUT
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
-	public Response edit(@PathParam("id") Long id, Reservation values) {
-		Reservation orig = super.find(id);
-		super.edit(orig);
+	public Response edit(@PathParam("flightId") Long flightId,@PathParam("id") Long id, Reservation values) {
+		Flight flight = em.find(Flight.class, flightId);
+		values.setId(id);
+		values.setFlight(flight);
+		super.edit(values);
 		return Response.ok().build();
 	}
 

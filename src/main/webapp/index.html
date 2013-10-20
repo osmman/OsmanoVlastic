@@ -207,6 +207,37 @@ body {
 				<button type="submit" class="btn btn-primary" id="flightCreate">Create</button>
 			</form>
 		</div>
+		
+		<!-- Flights -->
+		<div id="reservationPart" style="display: none;">
+			<h1>Reservations</h1>
+			<div class="message" style="height: 30px;">
+				
+			</div>
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th><a class="order" name="id" orderValue="">#<i></i></a></th>
+						<th><a class="order" name="created" orderValue="">Created<i></i></a></th>
+						<th><a class="order" name="password" orderValue="">Password<i></i></a></th>
+						<th><a class="order" name="seats" orderValue="">Seats<i></i></a></th>
+						<th><a class="order" name="state" orderValue="">State<i></i></a></th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<div class="row form-horizontal">
+				<div class="span5 control-group"><label class="control-label">Count</label><div class="controls"><input type="text" class="input-small" value="0" id="reservationCount" /></div></div>
+				<div class="span4 control-group"><label class="control-label">Offset</label><div class="controls"><input type="text" class="input-small" value="0" id="reservationOffset" /></div></div>
+			</div>
+			<h2>Create Reservation</h2>
+			<form class="form-inline">
+				<input type="text" placeholder="date of departure" id="reservationSeats" required="">
+				<button type="submit" class="btn btn-primary" id="reservationCreate">Create</button>
+			</form>
+		</div>
 
 
 	</div>
@@ -225,6 +256,7 @@ body {
 	<script type="text/javascript" src="assets/js/authentication.js"></script>
 	<script type="text/javascript" src="assets/js/destination.js"></script>
 	<script type="text/javascript" src="assets/js/flight.js"></script>
+	<script type="text/javascript" src="assets/js/reservation.js"></script>
 	<script>
 		$(document).ready(function() {
 			$('#authenticationSignIn').bind('click', function(e) {
@@ -267,6 +299,20 @@ body {
 			});
 			$('#flightOffset').bind('change', function(){
 				Flight.getFlights();
+			});
+			
+			
+			$('#reservationCreate').bind('click', function(e) {
+				Reservation.createSubmit(e);
+			});
+			$('#reservationPart thead th a').bind('click', function(){
+				Reservation.orderReservations(this);
+			});
+			$('#reservationCount').bind('change', function(){
+				Reservation.getReservations();
+			});
+			$('#reservationOffset').bind('change', function(){
+				Reservation.getReservations();
 			});
 			
 		});

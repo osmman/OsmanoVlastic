@@ -16,11 +16,15 @@ public abstract class UrlResource {
 	
 	public abstract Long getId();
 	
-	@XmlElement
 	public String getUrl(UriInfo uriInfo) {
 		return uriInfo.getPath()+"/"+getId();
 	}
-
+	
+	@XmlElement
+	public String getUrl() {
+		return url;
+	}
+	
 	@JsonIgnore
 	@XmlTransient
 	public String getResourceName(){

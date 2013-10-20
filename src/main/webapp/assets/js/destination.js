@@ -7,6 +7,7 @@ Destination = {
 		// hide other
 		$('#destinationPart').show();
 		$('#flightPart').hide();
+		$('#reservationPart').hide();
 		Destination.getDestinations();
 	},
 	orderDestinatios : function(e) {
