@@ -1,9 +1,10 @@
-package core;
+package core.query;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 public class QueryBuilder<T> {
@@ -18,6 +19,8 @@ public class QueryBuilder<T> {
 	private Integer base;
 
 	private Integer offset;
+	
+	private WhereBuilder<T> whereBuilder;
 	
 	private CriteriaQuery<T> cq;
 	
@@ -56,6 +59,10 @@ public class QueryBuilder<T> {
 	public void setOffset(Integer offset) {
 		this.offset = offset;
 	}
+	
+	public void setWhere(WhereBuilder<T> whereBuilder){
+		this.whereBuilder = whereBuilder;
+	}
 
 	public Query build() {
 		cb = em.getCriteriaBuilder();
@@ -64,6 +71,7 @@ public class QueryBuilder<T> {
 		cq.select(root);
 		
 		order();
+		where();
 		Query query = em.createQuery(cq);
 		
 		return limit(query);
@@ -89,6 +97,12 @@ public class QueryBuilder<T> {
 			q.setFirstResult(offset);
 		}
 		return q;
+	}
+	
+	private void where(){
+		if(whereBuilder != null){
+			cq.where(whereBuilder.build(cq, cb, root));
+		}
 	}
 	
 	private String[] parseOrder(String order){
