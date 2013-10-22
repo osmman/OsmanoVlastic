@@ -90,6 +90,7 @@ Reservation = {
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
+				request.setRequestHeader('X-Password', password);
 				request.setRequestHeader('Content-Type', 'application/json');
 			},
 			success : function(data) {
@@ -117,6 +118,7 @@ Reservation = {
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
+				request.setRequestHeader('X-Password', password);
 				request.setRequestHeader('Content-Type', 'application/json');
 			},
 			success : function(data) {
@@ -147,10 +149,9 @@ Reservation = {
 						+ Authentication.token);
 				request.setRequestHeader('Content-Type', 'application/json');
 			},
-			success : function(data) {
+			success : function(data, textStatus, request) {
 				$('#reservationPart .message p').remove();
-				// TODO password
-				$('<p class="text-success">Create success.</p>').appendTo(
+				$('<p class="text-success">Create success. Password is: <strong>'+request.getResponseHeader('X-Password')+'</strong></p>').appendTo(
 						$('#reservationPart .message'));
 				Reservation.getReservations();
 			},
