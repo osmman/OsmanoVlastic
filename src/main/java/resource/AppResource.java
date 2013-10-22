@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.swing.border.EtchedBorder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
+
+import core.message.SingleEntryPoint;
 
 @Path("/")
 @Stateless
@@ -29,10 +32,12 @@ public class AppResource {
 	
 	@GET
 	public Response getResources() {
-		Collection<URI> locales = new LinkedList<URI>();
-		locales.add(buildURIFromResource(DestinationResource.class));
-		locales.add(buildURIFromResource(FlightResource.class));
-		return Response.status(Status.NO_CONTENT).header("Locale", locales)
+		
+		SingleEntryPoint entry = new SingleEntryPoint();
+		entry.setDestination(buildURIFromResource(DestinationResource.class));
+		entry.setFlight(buildURIFromResource(FlightResource.class));
+
+		return Response.ok(entry)
 				.build();
 	}
 	

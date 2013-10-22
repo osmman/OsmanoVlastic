@@ -1,13 +1,10 @@
 package resource;
 
-import java.net.URI;
 import java.util.Collection;
-
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.transaction.UserTransaction;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -25,10 +22,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.Consumes;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-
-import org.jboss.resteasy.links.AddLinks;
-import org.jboss.resteasy.links.LinkResource;
-
 import core.resource.AbstractFacade;
 import model.Destination;
 

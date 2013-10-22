@@ -16,7 +16,6 @@
  */
 package resource;
 
-import javax.ejb.ApplicationException;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 

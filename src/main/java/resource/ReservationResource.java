@@ -2,21 +2,17 @@ package resource;
 
 import java.util.Collection;
 import java.util.Date;
-
-import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.UserTransaction;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -33,8 +29,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
-import org.jboss.logging.MDC;
-import org.jboss.resteasy.spi.NotFoundException;
 import org.jboss.resteasy.spi.UnauthorizedException;
 
 import model.Flight;
@@ -96,7 +90,7 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 	@RolesAllowed({ "admin" })
 	public Response add(@PathParam("flightId") Long flightId,
 			ReservationMapper mapper) {
-		Flight flight = em.find(Flight.class, flightId);
+		Flight flight = em.find(Flight.class, flightId, LockModeType.PESSIMISTIC_READ);
 		int count = 0;
 		for (Reservation r : flight.getReservations()) {
 			count += r.getSeats();
@@ -124,6 +118,8 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 			@PathParam("flightId") Long flightId, @PathParam("id") Long id,
 			ReservationMapper mapper) {
 		Reservation reservation = super.find(id);
+		Flight flight = reservation.getFlight();
+		em.lock(flight, LockModeType.PESSIMISTIC_READ);
 		testAutorization(reservation, password);
 		mapper.map(reservation);
 		super.edit(reservation);
@@ -162,7 +158,6 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 	private WhereBuilder<Reservation> createWhere(final Flight flight) {
 		return new WhereBuilder<Reservation>() {
 
-			@Override
 			public Predicate build(CriteriaQuery<Reservation> cq,
 					CriteriaBuilder cb, Root<Reservation> root) {
 				return cb.equal(root.get("flight"), flight);
