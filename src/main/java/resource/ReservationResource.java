@@ -11,6 +11,10 @@ import javax.ejb.TransactionManagementType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.UserTransaction;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
@@ -37,6 +41,7 @@ import model.Flight;
 import model.Reservation;
 import model.StateChoices;
 import core.mapper.ReservationMapper;
+import core.query.WhereBuilder;
 import core.resource.AbstractFacade;
 
 @Path(ResourceType.RESERVATION)
@@ -63,15 +68,17 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 			@HeaderParam("X-Offset") Integer offset,
 			@HeaderParam("X-Filter") String filter,
 			@PathParam("flightId") Long flightId) {
-		/**
-		 * @todo filtrovat dotaz findAll(order, base, offset);
-		 */
+
 		Flight flight = em.find(Flight.class, flightId);
-		Collection<Reservation> reservations = flight.getReservations();
+		testExistence(flight);
+
+		Collection<Reservation> reservations = super.findAll(order, base,
+				offset, createWhere(flight));
+
 		GenericEntity<Collection<Reservation>> entity = new GenericEntity<Collection<Reservation>>(
 				reservations) {
 		};
-		return Response.ok().header("X-Count-records", super.count())
+		return Response.ok().header("X-Count-records", super.count(createWhere(flight)))
 				.entity(entity).build();
 	}
 
@@ -152,4 +159,15 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 		}
 	}
 
+	private WhereBuilder<Reservation> createWhere(final Flight flight) {
+		return new WhereBuilder<Reservation>() {
+
+			@Override
+			public Predicate build(CriteriaQuery<Reservation> cq,
+					CriteriaBuilder cb, Root<Reservation> root) {
+				return cb.equal(root.get("flight"), flight);
+			}
+		};
+		
+	}
 }
