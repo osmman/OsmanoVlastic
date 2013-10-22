@@ -45,10 +45,23 @@ Flight = {
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
+				from = $('#flightFilterFrom').val();
+				to = $('#flightFilterTo').val();
+				filter = "";
+				if (from != "") {
+					filter += "dateOfDepartureFrom="+from;
+				}
+				if (to != "") {
+					if (filter != "") {
+						filter += ",";
+					}
+					filter += "dateOfDepartureTo="+to;
+				}
 				request.setRequestHeader('Accept', 'application/json');
 				request.setRequestHeader('X-Base', $('#flightCount').val());
 				request.setRequestHeader('X-Offset', $('#flightOffset').val());
 				request.setRequestHeader('X-Order', Flight.order);
+				request.setRequestHeader('X-Filter', filter);
 			},
 			success : function(data) {
 				Flight.flights = data;
@@ -68,7 +81,7 @@ Flight = {
 					'<tr><td class="id"><a href="#" class="open">'
 							+ Flight.flights[i].id
 							+ '</a></td><td><input type="text" name="dateOfDeparture" class="dateOfDeparture input-small" value="'
-							+ new Date(Flight.flights[i].dateOfDeparture).format("yyyy-MM-dd")
+							+ new Date(Flight.flights[i].dateOfDeparture).format("yyyy-MM-dd hh:mm:S")
 							+ '" /></td><td><input type="text" name="name" class="name input-small" value="'
 							+ Flight.flights[i].name
 							+ '"</td><td><select name="from" class="from"><option value="'

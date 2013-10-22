@@ -80,7 +80,7 @@ Reservation = {
 		id = line.find('.id').text();
 		seats = line.find('.seats').val();
 		password = line.find('.password').val();
-		Reservation.updateReservation(id, seats);
+		Reservation.updateReservation(id, seats, password);
 	},
 	updateReservation : function(id, seats, password) {
 		$.ajax({

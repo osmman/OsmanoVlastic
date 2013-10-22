@@ -37,6 +37,7 @@ import model.StateChoices;
 import core.mapper.ReservationMapper;
 import core.query.WhereBuilder;
 import core.resource.AbstractFacade;
+import core.utils.RandomString;
 
 @Path(ResourceType.RESERVATION)
 @Stateless
@@ -103,7 +104,7 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 		mapper.map(reservation);
 		reservation.setFlight(flight);
 		reservation.setCreated(new Date());
-		reservation.setPassword("passwd");
+		reservation.setPassword(RandomString.generateRandom(32));
 		reservation.setState(StateChoices.NEW);
 		super.create(reservation);
 		return Response.status(Status.CREATED)
