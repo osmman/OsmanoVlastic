@@ -7,6 +7,8 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.UserTransaction;
 
+import org.jboss.resteasy.spi.NotFoundException;
+
 import model.Destination;
 import core.QueryBuilder;
 
@@ -59,6 +61,12 @@ public abstract class AbstractFacade<T> {
 		cq.select(getEntityManager().getCriteriaBuilder().count(rt));
 		Query q = getEntityManager().createQuery(cq);
 		return ((Long) q.getSingleResult()).intValue();
+	}
+	
+	protected void testExistence(Object item){
+		if(item == null){
+			throw new NotFoundException("");
+		}
 	}
 
 }

@@ -77,7 +77,7 @@ public class FlightResource extends AbstractFacade<Flight> {
 	@Path("/")
 	@RolesAllowed({ "admin" })
 	public Response add(FlightMapper mapper){
-		Flight flight = mapper.getValue();
+		Flight flight = mapper.map(new Flight());
 		super.create(flight);
 		return Response.status(Status.CREATED)
 				.header("Locale", flight.getUrl()).build();
@@ -87,10 +87,9 @@ public class FlightResource extends AbstractFacade<Flight> {
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
 	public Response edit(@PathParam("id") Long id, FlightMapper mapper) {
-		Flight flight = mapper.getValue();
-		flight.setId(id);
+		Flight flight = super.find(id);
+		mapper.map(flight);
 		super.edit(flight);
-		flight.loadUrl();
 		return Response.status(Status.NO_CONTENT)
 				.header("Locale:", flight.getUrl()).build();
 	}
@@ -107,10 +106,10 @@ public class FlightResource extends AbstractFacade<Flight> {
 		return Response.status(Status.NO_CONTENT).build();
 	}
 	
-	@Path("/{flightId}/reservation")
-	public ReservationResource getReservationResource(){
-		return reservation;
-	}
+//	@Path("/{flightId}/reservation")
+//	public ReservationResource getReservationResource(){
+//		return reservation;
+//	}
 
 	@Override
 	protected EntityManager getEntityManager() {

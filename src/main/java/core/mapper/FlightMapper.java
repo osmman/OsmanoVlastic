@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import model.Destination;
 import model.Flight;
 
-@XmlRootElement
-public class FlightMapper {
+@XmlRootElement(name="flight")
+public class FlightMapper extends Mapper<Flight> {
 
 	private String name;
 
@@ -83,25 +83,25 @@ public class FlightMapper {
 		this.from = from;
 	}
 
-	public Flight getValue() {
-		Flight flight = new Flight();
-		flight.setDateOfDeparture(dateOfDeparture);
-		flight.setDistance(distance);
-		flight.setName(name);
-		flight.setPrice(price);
-		flight.setSeats(seats);
+	@Override
+	public Flight map(Flight origin) {
+		origin.setDateOfDeparture(dateOfDeparture);
+		origin.setDistance(distance);
+		origin.setName(name);
+		origin.setPrice(price);
+		origin.setSeats(seats);
 
 		if (this.from != null) {
 			Destination from = new Destination();
 			from.setId(this.from);
-			flight.setFrom(from);
+			origin.setFrom(from);
 		}
 
 		if (this.to != null) {
 			Destination to = new Destination();
 			to.setId(this.to);
-			flight.setTo(to);
+			origin.setTo(to);
 		}
-		return flight;
+		return origin;
 	}
 }

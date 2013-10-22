@@ -71,6 +71,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@Path("/{id}")
 	public Destination getDestination(@PathParam("id") Long id) {
 		Destination dest = super.find(id);
+		testExistence(dest);
 		dest.getArrivals();
 		return dest;
 	}
@@ -100,9 +101,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@RolesAllowed({ "admin" })
 	public Response delete(@PathParam("id") Long id) {
 		Destination item = super.find(id);
-		if (item == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
+		testExistence(item);
 		super.remove(item);
 		return Response.status(Status.NO_CONTENT).build();
 	}

@@ -12,6 +12,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,10 +30,13 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
 import org.jboss.logging.MDC;
+import org.jboss.resteasy.spi.NotFoundException;
+import org.jboss.resteasy.spi.UnauthorizedException;
 
 import model.Flight;
 import model.Reservation;
 import model.StateChoices;
+import core.mapper.ReservationMapper;
 import core.resource.AbstractFacade;
 
 @Path(ResourceType.RESERVATION)
@@ -60,72 +64,92 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 			@HeaderParam("X-Filter") String filter,
 			@PathParam("flightId") Long flightId) {
 		/**
-		 * @todo filtrovat dotaz 
-		 * findAll(order, base, offset);
+		 * @todo filtrovat dotaz findAll(order, base, offset);
 		 */
 		Flight flight = em.find(Flight.class, flightId);
 		Collection<Reservation> reservations = flight.getReservations();
-		GenericEntity<Collection<Reservation>> entity = new GenericEntity<Collection<Reservation>>(reservations) {};  
+		GenericEntity<Collection<Reservation>> entity = new GenericEntity<Collection<Reservation>>(
+				reservations) {
+		};
 		return Response.ok().header("X-Count-records", super.count())
 				.entity(entity).build();
 	}
 
 	@GET
 	@Path("/{id}")
-	public Response getReservation(@PathParam("id") Long id) {
+	public Response getReservation(@HeaderParam("X-Password") String password,
+			@PathParam("id") Long id) {
 		Reservation item = super.find(id);
-		return Response.status(Status.OK)
-				.entity(item).build();
+		testAutorization(item, password);
+		return Response.status(Status.OK).entity(item).build();
 	}
 
 	@POST
 	@Path("/")
 	@RolesAllowed({ "admin" })
-	public Response add(@PathParam("flightId") Long flightId, Reservation reservation){
+	public Response add(@PathParam("flightId") Long flightId,
+			ReservationMapper mapper) {
 		Flight flight = em.find(Flight.class, flightId);
 		int count = 0;
 		for (Reservation r : flight.getReservations()) {
 			count += r.getSeats();
 		}
-		if (flight.getSeats() < count + reservation.getSeats()) {
+		if (flight.getSeats() < count + mapper.getSeats()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
+
+		Reservation reservation = new Reservation();
+		mapper.map(reservation);
 		reservation.setFlight(flight);
-		Date d = new Date();
-		reservation.setCreated(d);
+		reservation.setCreated(new Date());
 		reservation.setPassword("passwd");
 		reservation.setState(StateChoices.NEW);
 		super.create(reservation);
 		return Response.status(Status.CREATED)
-				.header("Locale", reservation.getUrl()).header("password", reservation.getPassword()).build();
+				.header("Locale", reservation.getUrl())
+				.header("X-Password", reservation.getPassword()).build();
 	}
 
 	@PUT
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
-	public Response edit(@PathParam("flightId") Long flightId,@PathParam("id") Long id, Reservation values) {
-		Flight flight = em.find(Flight.class, flightId);
-		values.setId(id);
-		values.setFlight(flight);
-		super.edit(values);
-		return Response.ok().build();
+	public Response edit(@HeaderParam("X-Password") String password,
+			@PathParam("flightId") Long flightId, @PathParam("id") Long id,
+			ReservationMapper mapper) {
+		Reservation reservation = super.find(id);
+		testAutorization(reservation, password);
+		mapper.map(reservation);
+		super.edit(reservation);
+		return Response.status(Status.NO_CONTENT)
+				.header("Locale:", reservation.getUrl()).build();
 	}
 
 	@DELETE
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
-	public Response delete(@PathParam("id") Long id) {
-		super.remove(super.find(id));
-		return Response.ok().build();
+	public Response delete(@HeaderParam("X-Password") String password,
+			@PathParam("id") Long id) {
+		Reservation reservation = super.find(id);
+		testAutorization(reservation, password);
+		if (reservation.getState().equals(StateChoices.NEW)) {
+			super.remove(reservation);
+			return Response.status(Status.NO_CONTENT).build();
+		}
+
+		return Response.status(Status.BAD_REQUEST).build();
+
 	}
 
 	@Override
 	protected EntityManager getEntityManager() {
 		return em;
 	}
-	
-	@PostConstruct
-	private void loadFlight(){
+
+	private void testAutorization(Reservation reservation, String password) {
+		testExistence(reservation);
+		if (!reservation.getPassword().equals(password)) {
+			throw new UnauthorizedException();
+		}
 	}
 
 }
