@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import java.util.Collection;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,6 +37,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.Consumes;
+import javax.xml.bind.DatatypeConverter;
 
 import org.jboss.resteasy.spi.BadRequestException;
 
@@ -121,59 +123,54 @@ public class FlightResource extends AbstractFacade<Flight> {
 		return em;
 	}
 
+	@SuppressWarnings("restriction")
 	private WhereBuilder<Flight> createWhere(final String filter) {
 		if (filter == null || filter.isEmpty())
 			return null;
-
-		Pattern fromPatern = Pattern.compile("dateOfDepartureFrom=([^,]{19})");
-		Pattern toPatern = Pattern.compile("dateOfDepartureTo=([^,]{19})");
+		
+		Pattern fromPatern = Pattern.compile("dateOfDepartureFrom=([^,]{1,25})");
+		Pattern toPatern = Pattern.compile("dateOfDepartureTo=([^,]{1,25})");
 
 		Matcher fromMatcher = fromPatern.matcher(filter);
 		Matcher toMatcher = toPatern.matcher(filter);
 
-		try {
-			Date fromDate = null;
-			if (fromMatcher.find()) {
-				fromDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-						.parse(fromMatcher.group(1));
-			}
-
-			Date toDate = null;
-			if (toMatcher.find()) {
-				toDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-						.parse(toMatcher.group(1));
-			}
-
-			final Date from = fromDate;
-
-			final Date to = toDate;
-
-			WhereBuilder<Flight> whereBuilder = new WhereBuilder<Flight>() {
-
-				@Override
-				public Predicate build(CriteriaQuery<Flight> cq,
-						CriteriaBuilder cb, Root<Flight> root) {
-
-					List<Predicate> predicates = new ArrayList<Predicate>();
-
-					if (from != null) {
-						predicates.add(cb.greaterThanOrEqualTo(
-								root.<Date> get("dateOfDeparture"), from));
-					}
-
-					if (to != null) {
-						predicates.add(cb.lessThanOrEqualTo(
-								root.<Date> get("dateOfDeparture"), to));
-					}
-
-					return cb.and(predicates.toArray(new Predicate[] {}));
-				}
-			};
-
-			return whereBuilder;
-		} catch (ParseException e) {
-			throw new BadRequestException(e);
+		Date fromDate = null;
+		if (fromMatcher.find()) {
+			fromDate = DatatypeConverter.parseDateTime(fromMatcher.group(1)).getTime();
 		}
+
+		Date toDate = null;
+		if (toMatcher.find()) {
+			toDate = DatatypeConverter.parseDateTime(toMatcher.group(1)).getTime();
+		}
+		
+		final Date from = fromDate;
+
+		final Date to = toDate;
+
+		WhereBuilder<Flight> whereBuilder = new WhereBuilder<Flight>() {
+
+			public Predicate build(CriteriaQuery<Flight> cq,
+					CriteriaBuilder cb, Root<Flight> root) {
+
+				List<Predicate> predicates = new ArrayList<Predicate>();
+
+				if (from != null) {
+					predicates.add(cb.greaterThanOrEqualTo(
+							root.<Date> get("dateOfDeparture"), from));
+				}
+
+				if (to != null) {
+					predicates.add(cb.lessThanOrEqualTo(
+							root.<Date> get("dateOfDeparture"), to));
+				}
+
+				return cb.and(predicates.toArray(new Predicate[] {}));
+			}
+		};
+
+		return whereBuilder;
+
 	}
 
 }
