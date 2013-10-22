@@ -119,8 +119,15 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 			@PathParam("flightId") Long flightId, @PathParam("id") Long id,
 			ReservationMapper mapper) {
 		Reservation reservation = super.find(id);
-		Flight flight = reservation.getFlight();
-		em.lock(flight, LockModeType.PESSIMISTIC_READ);
+		Flight flight = em.find(Flight.class, flightId, LockModeType.PESSIMISTIC_READ);
+		int count = 0;
+		for (Reservation r : flight.getReservations()) {
+			if(r.getId().equals(id)) continue;
+			count += r.getSeats();
+		}
+		if (flight.getSeats() < count + mapper.getSeats()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 		testAutorization(reservation, password);
 		mapper.map(reservation);
 		super.edit(reservation);
