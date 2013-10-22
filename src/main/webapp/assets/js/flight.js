@@ -57,11 +57,13 @@ Flight = {
 					}
 					filter += "dateOfDepartureTo="+to;
 				}
+				if (filter != "") {
+					request.setRequestHeader('X-Filter', filter);
+				}
 				request.setRequestHeader('Accept', 'application/json');
 				request.setRequestHeader('X-Base', $('#flightCount').val());
 				request.setRequestHeader('X-Offset', $('#flightOffset').val());
 				request.setRequestHeader('X-Order', Flight.order);
-				request.setRequestHeader('X-Filter', filter);
 			},
 			success : function(data) {
 				Flight.flights = data;
