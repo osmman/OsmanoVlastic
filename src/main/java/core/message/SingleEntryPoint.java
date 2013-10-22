@@ -2,7 +2,7 @@ package core.message;
 
 import java.net.URI;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 public final class SingleEntryPoint {
@@ -11,10 +11,12 @@ public final class SingleEntryPoint {
 	
 	private URI flight;
 	
+	@XmlElement
 	public String getDestination() {
 		return destination.toString();
 	}
 	
+	@XmlElement
 	public String getFlight() {
 		return flight.toString();
 	}
