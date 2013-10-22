@@ -35,7 +35,7 @@ import model.Reservation;
 import model.StateChoices;
 import core.resource.AbstractFacade;
 
-@Path("/flight/{flightId}/reservation")
+@Path(ResourceType.RESERVATION)
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -97,7 +97,7 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 		reservation.setState(StateChoices.NEW);
 		super.create(reservation);
 		return Response.status(Status.CREATED)
-				.header("Locale", reservation.getUrl(this.uriInfo)).header("password", reservation.getPassword()).build();
+				.header("Locale", reservation.getUrl()).header("password", reservation.getPassword()).build();
 	}
 
 	@PUT

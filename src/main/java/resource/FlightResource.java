@@ -32,7 +32,7 @@ import core.mapper.FlightMapper;
 import core.resource.AbstractFacade;
 import model.Flight;
 
-@Path("/flight")
+@Path(ResourceType.FLIGHT)
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -80,7 +80,7 @@ public class FlightResource extends AbstractFacade<Flight> {
 		Flight flight = mapper.getValue();
 		super.create(flight);
 		return Response.status(Status.CREATED)
-				.header("Locale", flight.getUrl(this.uriInfo)).build();
+				.header("Locale", flight.getUrl()).build();
 	}
 	
 	@PUT
@@ -92,7 +92,7 @@ public class FlightResource extends AbstractFacade<Flight> {
 		super.edit(flight);
 		flight.loadUrl();
 		return Response.status(Status.NO_CONTENT)
-				.header("Locale:", flight.getUrl(this.uriInfo)).build();
+				.header("Locale:", flight.getUrl()).build();
 	}
 
 	@DELETE

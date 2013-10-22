@@ -9,16 +9,14 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.resteasy.spi.touri.ObjectToURI;
 import org.jboss.resteasy.spi.touri.URITemplate;
 
-@URITemplate("/osmanvlastic/rest/{resourceName}/{id}")
+import resource.ResourceType;
+
+@URITemplate(ResourceType.ROOT+"/{resourceName}/{id}")
 public abstract class UrlResource {
 	@Transient
 	private String url;
 	
 	public abstract Long getId();
-	
-	public String getUrl(UriInfo uriInfo) {
-		return uriInfo.getPath()+"/"+getId();
-	}
 	
 	@XmlElement
 	public String getUrl() {

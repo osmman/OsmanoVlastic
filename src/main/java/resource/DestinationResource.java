@@ -32,13 +32,13 @@ import org.jboss.resteasy.links.LinkResource;
 import core.resource.AbstractFacade;
 import model.Destination;
 
-@Path("/destination")
+@Path(ResourceType.DESTINATION)
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class DestinationResource extends AbstractFacade<Destination> {
-
+	
 	public DestinationResource() {
 		super(Destination.class);
 	}
@@ -81,7 +81,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	public Response add(Destination destination) {
 		super.create(destination);
 		return Response.status(Status.CREATED)
-				.header("Locale", destination.getUrl(this.uriInfo)).build();
+				.header("Locale", destination.getUrl()).build();
 	}
 
 	@PUT
@@ -92,7 +92,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 		super.edit(values);
 		values.loadUrl();
 		return Response.status(Status.NO_CONTENT)
-				.header("Locale:", values.getUrl(this.uriInfo)).build();
+				.header("Locale:", values.getUrl()).build();
 	}
 
 	@DELETE

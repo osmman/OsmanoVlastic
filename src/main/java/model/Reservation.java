@@ -11,9 +11,11 @@ import javax.persistence.*;
 import javax.ws.rs.DefaultValue;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.jboss.resteasy.spi.touri.URITemplate;
+
+import resource.ResourceType;
 import model.Flight;
 import model.StateChoices;
-
 import core.resource.UrlResource;
 
 /**
@@ -22,6 +24,7 @@ import core.resource.UrlResource;
  */
 @Entity
 @XmlRootElement
+@URITemplate(ResourceType.FULL_RESERVATION+"/{id}")
 public class Reservation extends UrlResource {
 
 	@Id
@@ -88,6 +91,10 @@ public class Reservation extends UrlResource {
 
 	public void setState(StateChoices state) {
 		this.state = state;
+	}
+	
+	public Long getFlightId(){
+		return getFlight().getId();
 	}
 	
 }
