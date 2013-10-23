@@ -132,7 +132,7 @@ public class ReservationResource extends AbstractFacade<Reservation> {
 		mapper.map(reservation);
 		super.edit(reservation);
 		return Response.status(Status.NO_CONTENT)
-				.header("Locale:", reservation.getUrl()).build();
+				.header("Locale", reservation.getUrl()).build();
 	}
 
 	@DELETE

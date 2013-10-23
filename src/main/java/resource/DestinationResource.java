@@ -86,7 +86,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
 		super.edit(values);
 		values.loadUrl();
 		return Response.status(Status.NO_CONTENT)
-				.header("Locale:", values.getUrl()).build();
+				.header("Locale", values.getUrl()).build();
 	}
 
 	@DELETE

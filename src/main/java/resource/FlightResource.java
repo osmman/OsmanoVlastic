@@ -103,7 +103,7 @@ public class FlightResource extends AbstractFacade<Flight> {
 		mapper.map(flight);
 		super.edit(flight);
 		return Response.status(Status.NO_CONTENT)
-				.header("Locale:", flight.getUrl()).build();
+				.header("Locale", flight.getUrl()).build();
 	}
 
 	@DELETE
