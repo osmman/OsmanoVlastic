@@ -1,6 +1,7 @@
 package resource;
 
 import java.util.Collection;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -22,6 +23,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.Consumes;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+
+import core.mapper.DestinationMapper;
 import core.resource.AbstractFacade;
 import model.Destination;
 
@@ -72,7 +75,8 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@POST
 	@Path("/")
 	@RolesAllowed({ "admin" })
-	public Response add(Destination destination) {
+	public Response add(DestinationMapper mapper) {
+		Destination destination = mapper.map(new Destination());
 		super.create(destination);
 		return Response.status(Status.CREATED)
 				.header("Locale", destination.getUrl()).build();
@@ -81,12 +85,11 @@ public class DestinationResource extends AbstractFacade<Destination> {
 	@PUT
 	@Path("/{id}")
 	@RolesAllowed({ "admin" })
-	public Response edit(@PathParam("id") Long id, Destination values) {
-		values.setId(id);
-		super.edit(values);
-		values.loadUrl();
+	public Response edit(@PathParam("id") Long id, DestinationMapper mapper) {
+		Destination destination = super.find(id);
+		super.edit(mapper.map(destination));
 		return Response.status(Status.NO_CONTENT)
-				.header("Locale", values.getUrl()).build();
+				.header("Locale", destination.getUrl()).build();
 	}
 
 	@DELETE

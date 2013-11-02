@@ -42,6 +42,10 @@ public class Destination extends UrlResource {
 	@Size(min = 1, max = 255)
 	@Column(unique = true)
 	private String name;
+	
+	private String latitude;
+	
+	private String longitude;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "from")
 	private Set<Flight> departures;
@@ -70,6 +74,22 @@ public class Destination extends UrlResource {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
 	@XmlTransient
