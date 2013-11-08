@@ -1,16 +1,11 @@
 package resource;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
-import java.util.Collection;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import client.ClientException;
+import client.flight.AosFlightDistanceClient;
+import core.mapper.FlightMapper;
+import core.query.WhereBuilder;
+import core.resource.AbstractFacade;
+import model.Flight;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -22,29 +17,18 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.Consumes;
 import javax.xml.bind.DatatypeConverter;
-
-import org.jboss.resteasy.spi.BadRequestException;
-
-import core.mapper.FlightMapper;
-import core.query.WhereBuilder;
-import core.resource.AbstractFacade;
-import model.Flight;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Path(ResourceType.FLIGHT)
 @Stateless
@@ -62,6 +46,9 @@ public class FlightResource extends AbstractFacade<Flight> {
 
     @Inject
     private EntityManager em;
+
+    @Inject
+    private UserTransaction userTransaction;
 
     @GET
     @Path("/")
@@ -88,9 +75,23 @@ public class FlightResource extends AbstractFacade<Flight> {
     @POST
     @Path("/")
     @RolesAllowed({"admin"})
-    public Response add(FlightMapper mapper) {
+    public Response add(FlightMapper mapper) throws SystemException {
         Flight flight = mapper.map(new Flight());
+
         super.create(flight);
+
+        try {
+
+            AosFlightDistanceClient client = new AosFlightDistanceClient();
+            Double distance = client.getDistance(flight.getFrom().getGeocode(), flight.getTo().getGeocode());
+            flight.setDistance(distance.floatValue());
+            flight.setPrice(distance.floatValue() * 10);
+
+        } catch (ClientException e) {
+            userTransaction.setRollbackOnly();
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+
         return Response.status(Status.CREATED)
                 .header("Locale", flight.getUrl()).build();
     }
@@ -98,10 +99,23 @@ public class FlightResource extends AbstractFacade<Flight> {
     @PUT
     @Path("/{id}")
     @RolesAllowed({"admin"})
-    public Response edit(@PathParam("id") Long id, FlightMapper mapper) {
+    public Response edit(@PathParam("id") Long id, FlightMapper mapper) throws SystemException {
         Flight flight = super.find(id);
         mapper.map(flight);
         super.edit(flight);
+
+        try {
+
+            AosFlightDistanceClient client = new AosFlightDistanceClient();
+            Double distance = client.getDistance(flight.getFrom().getGeocode(), flight.getTo().getGeocode());
+            flight.setDistance(distance.floatValue());
+            flight.setPrice(distance.floatValue() * 10);
+
+        } catch (ClientException e) {
+            userTransaction.setRollbackOnly();
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+
         return Response.status(Status.NO_CONTENT)
                 .header("Locale", flight.getUrl()).build();
     }

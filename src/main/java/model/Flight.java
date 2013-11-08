@@ -19,119 +19,120 @@ import core.resource.UrlResource;
 
 /**
  * Entity implementation class for Entity: Flight
- * 
  */
 @Entity
 @XmlRootElement
 public class Flight extends UrlResource {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	
-	@NotNull
-	@Size(min = 1, max = 255)
-	@Column(unique = true)
-	private String name;
-	
-	private Date dateOfDeparture;
-	
-	private Float distance;
-	
-	private Integer seats;
-	
-	private Float price;
-	
-	@ManyToOne(fetch= FetchType.EAGER)
-	@JoinColumn(name = "to_id")
-	private Destination to;
-	
-	
-	@ManyToOne(fetch= FetchType.EAGER)
-	@JoinColumn(name = "from_id")
-	private Destination from;
-	
-	@OneToMany(fetch=FetchType.EAGER, mappedBy="flight")
-	private Collection<Reservation> reservations;
-	
-	private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	public Flight() {
-		super();
-	}
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(unique = true)
+    private String name;
 
-	public Long getId() {
-		return this.id;
-	}
+    private Date dateOfDeparture;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    private Float distance;
 
-	public Date getDateOfDeparture() {
-		return this.dateOfDeparture;
-	}
+    private Integer seats;
 
-	public void setDateOfDeparture(Date date) {
-		this.dateOfDeparture = date;
-	}
+    private Float price;
 
-	public Float getDistance() {
-		return this.distance;
-	}
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "to_id")
+    @NotNull
+    private Destination to;
 
-	public void setDistance(Float distance) {
-		this.distance = distance;
-	}
 
-	public Integer getSeats() {
-		return this.seats;
-	}
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "from_id")
+    @NotNull
+    private Destination from;
 
-	public void setSeats(Integer seats) {
-		this.seats = seats;
-	}
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "flight")
+    private Collection<Reservation> reservations;
 
-	public Float getPrice() {
-		return this.price;
-	}
+    private static final long serialVersionUID = 1L;
 
-	public void setPrice(Float Price) {
-		this.price = Price;
-	}
+    public Flight() {
+        super();
+    }
 
-	public Destination getTo() {
-		return to;
-	}
+    public Long getId() {
+        return this.id;
+    }
 
-	public void setTo(Destination to) {
-		this.to = to;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Destination getFrom() {
-		return from;
-	}
+    public Date getDateOfDeparture() {
+        return this.dateOfDeparture;
+    }
 
-	public void setFrom(Destination from) {
-		this.from = from;
-	}
+    public void setDateOfDeparture(Date date) {
+        this.dateOfDeparture = date;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Float getDistance() {
+        return this.distance;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	@JsonIgnore
-	@XmlTransient
-	public Collection<Reservation> getReservations() {
-		return reservations;
-	}
+    public void setDistance(Float distance) {
+        this.distance = distance;
+    }
 
-	@PostLoad
-	public void loadUrl(){
-		super.loadUrl();
-	}
+    public Integer getSeats() {
+        return this.seats;
+    }
+
+    public void setSeats(Integer seats) {
+        this.seats = seats;
+    }
+
+    public Float getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(Float Price) {
+        this.price = Price;
+    }
+
+    public Destination getTo() {
+        return to;
+    }
+
+    public void setTo(Destination to) {
+        this.to = to;
+    }
+
+    public Destination getFrom() {
+        return from;
+    }
+
+    public void setFrom(Destination from) {
+        this.from = from;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    public Collection<Reservation> getReservations() {
+        return reservations;
+    }
+
+    @PostLoad
+    public void loadUrl() {
+        super.loadUrl();
+    }
 }

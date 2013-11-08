@@ -1,4 +1,4 @@
-package client.maps;
+package model;
 
 public class Geocode {
 
@@ -28,5 +28,8 @@ public class Geocode {
         this.longitude = longitude;
     }
 
-
+    @Override
+    public String toString() {
+        return latitude + "," + longitude;
+    }
 }

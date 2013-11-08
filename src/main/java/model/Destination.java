@@ -92,6 +92,12 @@ public class Destination extends UrlResource {
         return departures;
     }
 
+    @XmlTransient
+    @JsonIgnore
+    public Geocode getGeocode() {
+        return new Geocode(latitude, longitude);
+    }
+
     @PostLoad
     public void loadUrl() {
         super.loadUrl();

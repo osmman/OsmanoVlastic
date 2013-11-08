@@ -1,7 +1,7 @@
 package resource;
 
 import client.ClientException;
-import client.maps.Geocode;
+import model.Geocode;
 import client.maps.GoogleMapsClient;
 import core.mapper.DestinationMapper;
 import core.resource.AbstractFacade;
@@ -100,7 +100,8 @@ public class DestinationResource extends AbstractFacade<Destination> {
             destination.setLatitude(geocode.getLatitude());
             destination.setLongitude(geocode.getLongitude());
 
-            super.edit(mapper.map(destination));
+            System.out.println(geocode);
+            super.edit(destination);
             return Response.status(Status.NO_CONTENT)
                     .header("Locale", destination.getUrl()).build();
 

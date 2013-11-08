@@ -10,98 +10,76 @@ import javax.xml.bind.annotation.XmlRootElement;
 import model.Destination;
 import model.Flight;
 
-@XmlRootElement(name="flight")
+@XmlRootElement(name = "flight")
 public class FlightMapper extends Mapper<Flight> {
 
-	private String name;
+    private String name;
 
-	private Date dateOfDeparture;
+    private Date dateOfDeparture;
 
-	private Float distance;
+    private Integer seats;
 
-	private Integer seats;
+    private Long to;
 
-	private Float price;
+    private Long from;
 
-	private Long to;
+    public String getName() {
+        return name;
+    }
 
-	private Long from;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Date getDateOfDeparture() {
+        return dateOfDeparture;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setDateOfDeparture(Date dateOfDeparture) {
+        this.dateOfDeparture = dateOfDeparture;
+    }
 
-	public Date getDateOfDeparture() {
-		return dateOfDeparture;
-	}
+    public Integer getSeats() {
+        return seats;
+    }
 
-	public void setDateOfDeparture(Date dateOfDeparture) {
-		this.dateOfDeparture = dateOfDeparture;
-	}
+    public void setSeats(Integer seats) {
+        this.seats = seats;
+    }
 
-	public Float getDistance() {
-		return distance;
-	}
+    public Long getTo() {
+        return to;
+    }
 
-	public void setDistance(Float distance) {
-		this.distance = distance;
-	}
+    public void setTo(Long to) {
+        this.to = to;
+    }
 
-	public Integer getSeats() {
-		return seats;
-	}
+    public Long getFrom() {
+        return from;
+    }
 
-	public void setSeats(Integer seats) {
-		this.seats = seats;
-	}
+    public void setFrom(Long from) {
+        this.from = from;
+    }
 
-	public Float getPrice() {
-		return price;
-	}
+    @Override
+    public Flight map(Flight origin) {
+        origin.setDateOfDeparture(dateOfDeparture);
+        origin.setName(name);
+        origin.setSeats(seats);
 
-	public void setPrice(Float price) {
-		this.price = price;
-	}
+        if (this.from != null) {
+            Destination from = new Destination();
+            from.setId(this.from);
+            origin.setFrom(from);
+        }
 
-	public Long getTo() {
-		return to;
-	}
-
-	public void setTo(Long to) {
-		this.to = to;
-	}
-
-	public Long getFrom() {
-		return from;
-	}
-
-	public void setFrom(Long from) {
-		this.from = from;
-	}
-
-	@Override
-	public Flight map(Flight origin) {
-		origin.setDateOfDeparture(dateOfDeparture);
-		origin.setDistance(distance);
-		origin.setName(name);
-		origin.setPrice(price);
-		origin.setSeats(seats);
-
-		if (this.from != null) {
-			Destination from = new Destination();
-			from.setId(this.from);
-			origin.setFrom(from);
-		}
-
-		if (this.to != null) {
-			Destination to = new Destination();
-			to.setId(this.to);
-			origin.setTo(to);
-		}
-		return origin;
-	}
+        if (this.to != null) {
+            Destination to = new Destination();
+            to.setId(this.to);
+            origin.setTo(to);
+        }
+        return origin;
+    }
 }

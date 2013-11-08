@@ -19,72 +19,74 @@ import core.query.WhereBuilder;
 
 public abstract class AbstractFacade<T> {
 
-	private Class<T> entityClass;
+    private Class<T> entityClass;
 
-	public AbstractFacade(Class<T> entityClass) {
-		this.entityClass = entityClass;
-	}
+    public AbstractFacade(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
 
-	protected abstract EntityManager getEntityManager();
+    protected abstract EntityManager getEntityManager();
 
-	public void create(T entity) {
-		getEntityManager().persist(entity);
-		getEntityManager().flush();
-		getEntityManager().refresh(entity);
-	}
+    public void create(T entity) {
+        getEntityManager().persist(entity);
+        getEntityManager().flush();
+        getEntityManager().refresh(entity);
+    }
 
-	public void edit(T entity) {
-		getEntityManager().merge(entity);
-	}
+    public void edit(T entity) {
+        getEntityManager().merge(entity);
+        getEntityManager().flush();
+        getEntityManager().refresh(entity);
+    }
 
-	public void remove(T entity) {
-		getEntityManager().remove(getEntityManager().merge(entity));
-	}
+    public void remove(T entity) {
+        getEntityManager().remove(getEntityManager().merge(entity));
+    }
 
-	public T find(Object id) {
-		return getEntityManager().find(entityClass, id);
-	}
+    public T find(Object id) {
+        return getEntityManager().find(entityClass, id);
+    }
 
-	public List<T> findAll(String order, Integer base, Integer offset) {
-		return findAll(order, base, offset, null);
-	}
+    public List<T> findAll(String order, Integer base, Integer offset) {
+        return findAll(order, base, offset, null);
+    }
 
-	public List<T> findAll(String order, Integer base, Integer offset,
-			WhereBuilder<T> whereBuilder) {
-		QueryBuilder<T> builder = new QueryBuilder<T>(entityClass,
-				getEntityManager());
-		builder.setOrder(order);
-		builder.setBase(base);
-		builder.setOffset(offset);
-		builder.setWhere(whereBuilder);
-		Query q = builder.build();
-		return q.getResultList();
-	}
+    public List<T> findAll(String order, Integer base, Integer offset,
+                           WhereBuilder<T> whereBuilder) {
+        QueryBuilder<T> builder = new QueryBuilder<T>(entityClass,
+                getEntityManager());
+        builder.setOrder(order);
+        builder.setBase(base);
+        builder.setOffset(offset);
+        builder.setWhere(whereBuilder);
+        Query q = builder.build();
+        return q.getResultList();
+    }
 
-	public boolean contains(T entity) {
-		return this.getEntityManager().contains(entity);
-	}
+    public boolean contains(T entity) {
+        return this.getEntityManager().contains(entity);
+    }
 
-	public int count() {
-		return count(null);
-	}
+    public int count() {
+        return count(null);
+    }
 
-	public int count(WhereBuilder<T> whereBuilder) {
-		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-		CriteriaQuery<T> cq = cb.createQuery(entityClass);
-		Root<T> rt = cq.from(entityClass);
-		cq.select((Selection<? extends T>) cb.count(rt));
-		if (whereBuilder != null) {
-			cq.where(whereBuilder.build(cq, cb, rt));
-		}
-		Query q = getEntityManager().createQuery(cq);
-		return ((Long) q.getSingleResult()).intValue();
-	}
+    public int count(WhereBuilder<T> whereBuilder) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> rt = cq.from(entityClass);
+        cq.select((Selection<? extends T>) cb.count(rt));
+        if (whereBuilder != null) {
+            cq.where(whereBuilder.build(cq, cb, rt));
+        }
+        Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+    }
 
-	protected void testExistence(Object item) {
-		if (item == null) {
-			throw new NotFoundException("");
-		}
-	}
+    protected void testExistence(Object item) {
+        if (item == null) {
+            throw new NotFoundException("");
+        }
+    }
 
 }
