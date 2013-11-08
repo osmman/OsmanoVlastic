@@ -4,22 +4,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import model.Destination;
 
-@XmlRootElement(name="destination")
-public class DestinationMapper {
-	
-	private String name;
+@XmlRootElement(name = "destination")
+public class DestinationMapper extends Mapper<Destination> {
 
-	public String getName() {
-		return name;
-	}
+    private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public Destination map(Destination origin) {
-		origin.setName(name);
-		return origin;
-	}
-	
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Destination map(Destination origin) {
+        origin.setName(name);
+        return origin;
+    }
+
 }

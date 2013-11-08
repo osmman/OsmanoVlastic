@@ -1,110 +1,128 @@
 package resource;
 
-import java.util.Collection;
-
-import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.Consumes;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-
+import client.ClientException;
+import client.maps.Geocode;
+import client.maps.GoogleMapsClient;
 import core.mapper.DestinationMapper;
 import core.resource.AbstractFacade;
 import model.Destination;
 
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.transaction.*;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.Status;
+import java.util.Collection;
+
 @Path(ResourceType.DESTINATION)
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class DestinationResource extends AbstractFacade<Destination> {
-	
-	public DestinationResource() {
-		super(Destination.class);
-	}
 
-	@Context
-	UriInfo uriInfo;
+    public DestinationResource() {
+        super(Destination.class);
+    }
 
-	@Inject
-	private EntityManager em;
+    @Context
+    UriInfo uriInfo;
 
-	// @Inject
-	// private UserTransaction userTransaction;
+    @Inject
+    private EntityManager em;
 
-	@GET
-	@Path("/")
-	public Response getDestinations(@HeaderParam("X-Order") String order,
-			@HeaderParam("X-Base") Integer base,
-			@HeaderParam("X-Offset") Integer offset,
-			@HeaderParam("X-Filter") String filter) {
-		Collection<Destination> destinations = super.findAll(order, base,
-				offset);
-		GenericEntity<Collection<Destination>> entity = new GenericEntity<Collection<Destination>>(
-				destinations) {
-		};
-		return Response.ok().header("X-Count-records", super.count())
-				.entity(entity).build();
-	}
+    @Inject
+    private UserTransaction userTransaction;
 
-	@GET
-	@Path("/{id}")
-	public Destination getDestination(@PathParam("id") Long id) {
-		Destination dest = super.find(id);
-		testExistence(dest);
-		dest.getArrivals();
-		return dest;
-	}
+    @GET
+    @Path("/")
+    public Response getDestinations(@HeaderParam("X-Order") String order,
+                                    @HeaderParam("X-Base") Integer base,
+                                    @HeaderParam("X-Offset") Integer offset,
+                                    @HeaderParam("X-Filter") String filter) {
+        Collection<Destination> destinations = super.findAll(order, base,
+                offset);
+        GenericEntity<Collection<Destination>> entity = new GenericEntity<Collection<Destination>>(
+                destinations) {
+        };
+        return Response.ok().header("X-Count-records", super.count())
+                .entity(entity).build();
+    }
 
-	@POST
-	@Path("/")
-	@RolesAllowed({ "admin" })
-	public Response add(DestinationMapper mapper) {
-		Destination destination = mapper.map(new Destination());
-		super.create(destination);
-		return Response.status(Status.CREATED)
-				.header("Locale", destination.getUrl()).build();
-	}
+    @GET
+    @Path("/{id}")
+    public Destination getDestination(@PathParam("id") Long id) {
+        Destination destination = super.find(id);
+        testExistence(destination);
+        destination.getArrivals();
+        return destination;
+    }
 
-	@PUT
-	@Path("/{id}")
-	@RolesAllowed({ "admin" })
-	public Response edit(@PathParam("id") Long id, DestinationMapper mapper) {
-		Destination destination = super.find(id);
-		super.edit(mapper.map(destination));
-		return Response.status(Status.NO_CONTENT)
-				.header("Locale", destination.getUrl()).build();
-	}
+    @POST
+    @Path("/")
+    @RolesAllowed({"admin"})
+    public Response add(DestinationMapper mapper) throws SystemException {
+        try {
+            Destination destination = mapper.map(new Destination());
 
-	@DELETE
-	@Path("/{id}")
-	@RolesAllowed({ "admin" })
-	public Response delete(@PathParam("id") Long id) {
-		Destination item = super.find(id);
-		testExistence(item);
-		super.remove(item);
-		return Response.status(Status.NO_CONTENT).build();
-	}
+            GoogleMapsClient client = new GoogleMapsClient();
+            Geocode geocode = client.getGeocode(destination.getName());
+            destination.setLatitude(geocode.getLatitude());
+            destination.setLongitude(geocode.getLongitude());
 
-	@Override
-	protected EntityManager getEntityManager() {
-		return em;
-	}
+            super.create(destination);
+            return Response.status(Status.CREATED)
+                    .header("Locale", destination.getUrl()).build();
+
+        } catch (ClientException e) {
+            userTransaction.setRollbackOnly();
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+
+    }
+
+    @PUT
+    @Path("/{id}")
+    @RolesAllowed({"admin"})
+    public Response edit(@PathParam("id") Long id, DestinationMapper mapper) throws SystemException {
+
+        try {
+            Destination destination = super.find(id);
+            mapper.map(destination);
+
+            GoogleMapsClient client = new GoogleMapsClient();
+            Geocode geocode = client.getGeocode(destination.getName());
+            destination.setLatitude(geocode.getLatitude());
+            destination.setLongitude(geocode.getLongitude());
+
+            super.edit(mapper.map(destination));
+            return Response.status(Status.NO_CONTENT)
+                    .header("Locale", destination.getUrl()).build();
+
+        } catch (ClientException e) {
+            userTransaction.setRollbackOnly();
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @RolesAllowed({"admin"})
+    public Response delete(@PathParam("id") Long id) {
+        Destination item = super.find(id);
+        testExistence(item);
+        super.remove(item);
+        return Response.status(Status.NO_CONTENT).build();
+    }
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
 
 }
