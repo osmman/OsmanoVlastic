@@ -49,128 +49,128 @@ import model.Flight;
 @Path(ResourceType.FLIGHT)
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class FlightResource extends AbstractFacade<Flight> {
 
-	public FlightResource() {
-		super(Flight.class);
-	}
+    public FlightResource() {
+        super(Flight.class);
+    }
 
-	@Context
-	UriInfo uriInfo;
+    @Context
+    UriInfo uriInfo;
 
-	@Inject
-	private EntityManager em;
+    @Inject
+    private EntityManager em;
 
-	@GET
-	@Path("/")
-	public Response getFlights(@HeaderParam("X-Order") String order,
-			@HeaderParam("X-Base") Integer base,
-			@HeaderParam("X-Offset") Integer offset,
-			@HeaderParam("X-Filter") String filter) {
-		Collection<Flight> flight = super.findAll(order, base, offset,
-				createWhere(filter));
-		GenericEntity<Collection<Flight>> entity = new GenericEntity<Collection<Flight>>(
-				flight) {
-		};
-		return Response.ok()
-				.header("X-Count-records", super.count(createWhere(filter)))
-				.entity(entity).build();
-	}
+    @GET
+    @Path("/")
+    public Response getFlights(@HeaderParam("X-Order") String order,
+                               @HeaderParam("X-Base") Integer base,
+                               @HeaderParam("X-Offset") Integer offset,
+                               @HeaderParam("X-Filter") String filter) {
+        Collection<Flight> flight = super.findAll(order, base, offset,
+                createWhere(filter));
+        GenericEntity<Collection<Flight>> entity = new GenericEntity<Collection<Flight>>(
+                flight) {
+        };
+        return Response.ok()
+                .header("X-Count-records", super.count(createWhere(filter)))
+                .entity(entity).build();
+    }
 
-	@GET
-	@Path("/{id}")
-	public Flight getFlight(@PathParam("id") Long id) {
-		return super.find(id);
-	}
+    @GET
+    @Path("/{id}")
+    public Flight getFlight(@PathParam("id") Long id) {
+        return super.find(id);
+    }
 
-	@POST
-	@Path("/")
-	@RolesAllowed({ "admin" })
-	public Response add(FlightMapper mapper) {
-		Flight flight = mapper.map(new Flight());
-		super.create(flight);
-		return Response.status(Status.CREATED)
-				.header("Locale", flight.getUrl()).build();
-	}
+    @POST
+    @Path("/")
+    @RolesAllowed({"admin"})
+    public Response add(FlightMapper mapper) {
+        Flight flight = mapper.map(new Flight());
+        super.create(flight);
+        return Response.status(Status.CREATED)
+                .header("Locale", flight.getUrl()).build();
+    }
 
-	@PUT
-	@Path("/{id}")
-	@RolesAllowed({ "admin" })
-	public Response edit(@PathParam("id") Long id, FlightMapper mapper) {
-		Flight flight = super.find(id);
-		mapper.map(flight);
-		super.edit(flight);
-		return Response.status(Status.NO_CONTENT)
-				.header("Locale", flight.getUrl()).build();
-	}
+    @PUT
+    @Path("/{id}")
+    @RolesAllowed({"admin"})
+    public Response edit(@PathParam("id") Long id, FlightMapper mapper) {
+        Flight flight = super.find(id);
+        mapper.map(flight);
+        super.edit(flight);
+        return Response.status(Status.NO_CONTENT)
+                .header("Locale", flight.getUrl()).build();
+    }
 
-	@DELETE
-	@Path("/{id}")
-	@RolesAllowed({ "admin" })
-	public Response deleten(@PathParam("id") Long id) {
-		Flight item = super.find(id);
-		if (item == null) {
-			return Response.status(Status.NOT_FOUND).build();
-		}
-		super.remove(item);
-		return Response.status(Status.NO_CONTENT).build();
-	}
+    @DELETE
+    @Path("/{id}")
+    @RolesAllowed({"admin"})
+    public Response delete(@PathParam("id") Long id) {
+        Flight item = super.find(id);
+        if (item == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        super.remove(item);
+        return Response.status(Status.NO_CONTENT).build();
+    }
 
-	@Override
-	protected EntityManager getEntityManager() {
-		return em;
-	}
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
 
-	@SuppressWarnings("restriction")
-	private WhereBuilder<Flight> createWhere(final String filter) {
-		if (filter == null || filter.isEmpty())
-			return null;
-		
-		Pattern fromPatern = Pattern.compile("dateOfDepartureFrom=([^,]{1,25})");
-		Pattern toPatern = Pattern.compile("dateOfDepartureTo=([^,]{1,25})");
+    @SuppressWarnings("restriction")
+    private WhereBuilder<Flight> createWhere(final String filter) {
+        if (filter == null || filter.isEmpty())
+            return null;
 
-		Matcher fromMatcher = fromPatern.matcher(filter);
-		Matcher toMatcher = toPatern.matcher(filter);
+        Pattern fromPattern = Pattern.compile("dateOfDepartureFrom=([^,]{1,25})");
+        Pattern toPattern = Pattern.compile("dateOfDepartureTo=([^,]{1,25})");
 
-		Date fromDate = null;
-		if (fromMatcher.find()) {
-			fromDate = DatatypeConverter.parseDateTime(fromMatcher.group(1)).getTime();
-		}
+        Matcher fromMatcher = fromPattern.matcher(filter);
+        Matcher toMatcher = toPattern.matcher(filter);
 
-		Date toDate = null;
-		if (toMatcher.find()) {
-			toDate = DatatypeConverter.parseDateTime(toMatcher.group(1)).getTime();
-		}
-		
-		final Date from = fromDate;
+        Date fromDate = null;
+        if (fromMatcher.find()) {
+            fromDate = DatatypeConverter.parseDateTime(fromMatcher.group(1)).getTime();
+        }
 
-		final Date to = toDate;
+        Date toDate = null;
+        if (toMatcher.find()) {
+            toDate = DatatypeConverter.parseDateTime(toMatcher.group(1)).getTime();
+        }
 
-		WhereBuilder<Flight> whereBuilder = new WhereBuilder<Flight>() {
+        final Date from = fromDate;
 
-			public Predicate build(CriteriaQuery<Flight> cq,
-					CriteriaBuilder cb, Root<Flight> root) {
+        final Date to = toDate;
 
-				List<Predicate> predicates = new ArrayList<Predicate>();
+        WhereBuilder<Flight> whereBuilder = new WhereBuilder<Flight>() {
 
-				if (from != null) {
-					predicates.add(cb.greaterThanOrEqualTo(
-							root.<Date> get("dateOfDeparture"), from));
-				}
+            public Predicate build(CriteriaQuery<Flight> cq,
+                                   CriteriaBuilder cb, Root<Flight> root) {
 
-				if (to != null) {
-					predicates.add(cb.lessThanOrEqualTo(
-							root.<Date> get("dateOfDeparture"), to));
-				}
+                List<Predicate> predicates = new ArrayList<Predicate>();
 
-				return cb.and(predicates.toArray(new Predicate[] {}));
-			}
-		};
+                if (from != null) {
+                    predicates.add(cb.greaterThanOrEqualTo(
+                            root.<Date>get("dateOfDeparture"), from));
+                }
 
-		return whereBuilder;
+                if (to != null) {
+                    predicates.add(cb.lessThanOrEqualTo(
+                            root.<Date>get("dateOfDeparture"), to));
+                }
 
-	}
+                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+
+        return whereBuilder;
+
+    }
 
 }

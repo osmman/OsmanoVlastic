@@ -8,104 +8,92 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.ws.rs.core.UriBuilder;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.jboss.resteasy.spi.touri.ObjectToURI;
-import org.jboss.resteasy.spi.touri.URITemplate;
-
-import javax.xml.bind.annotation.adapters.*;
-
-//import org.jboss.resteasy.annotations.providers.jaxb.json.Mapped;
-//import org.jboss.resteasy.annotations.providers.jaxb.json.XmlNsMap;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import core.resource.UrlResource;
 
 /**
- * Entity implementation class for Entity: Destinantion
- * 
+ * Entity implementation class for Entity: Destination
  */
 @Entity
 @XmlRootElement
 public class Destination extends UrlResource {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
-	@NotNull
-	@Size(min = 1, max = 255)
-	@Column(unique = true)
-	private String name;
-	
-	private String latitude;
-	
-	private String longitude;
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(unique = true)
+    private String name;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "from")
-	private Set<Flight> departures;
+    private String latitude;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "to")
-	private Set<Flight> arrivals;
+    private String longitude;
 
-	@SuppressWarnings("unused")
-	private static final long serialVersionUID = 1L;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "from")
+    private Set<Flight> departures;
 
-	public Destination() {
-		super();
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "to")
+    private Set<Flight> arrivals;
 
-	public Long getId() {
-		return this.id;
-	}
+    @SuppressWarnings("unused")
+    private static final long serialVersionUID = 1L;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Destination() {
+        super();
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public Long getId() {
+        return this.id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getLatitude() {
-		return latitude;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getLongitude() {
-		return longitude;
-	}
+    public String getLatitude() {
+        return latitude;
+    }
 
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
 
-	@XmlTransient
-	@JsonIgnore
-	public Collection<Flight> getArrivals() {
-		return arrivals;
-	}
+    public String getLongitude() {
+        return longitude;
+    }
 
-	@XmlTransient
-	@JsonIgnore
-	public Collection<Flight> getDepartures() {
-		return departures;
-	}
-	
-	@PostLoad
-	public void loadUrl(){
-		super.loadUrl();
-	}
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Flight> getArrivals() {
+        return arrivals;
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public Collection<Flight> getDepartures() {
+        return departures;
+    }
+
+    @PostLoad
+    public void loadUrl() {
+        super.loadUrl();
+    }
 }
