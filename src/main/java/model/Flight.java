@@ -1,27 +1,25 @@
 package model;
 
-import java.io.Serializable;
-import java.lang.Float;
-import java.lang.Integer;
-import java.lang.Long;
-import java.util.Collection;
-import java.util.Date;
+import core.listener.FlightListener;
+import core.resource.UrlResource;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import core.resource.UrlResource;
+import java.util.Collection;
+import java.util.Date;
 
 /**
  * Entity implementation class for Entity: Flight
  */
 @Entity
 @XmlRootElement
+@EntityListeners(FlightListener.class)
 public class Flight extends UrlResource {
 
     @Id
@@ -40,6 +38,9 @@ public class Flight extends UrlResource {
     private Integer seats;
 
     private Float price;
+
+    @Transient
+    private Double rate = 1.;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "to_id")
@@ -93,8 +94,16 @@ public class Flight extends UrlResource {
         this.seats = seats;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public Float getPrice() {
         return this.price;
+    }
+
+    @XmlElement(name = "price")
+    @JsonProperty("price")
+    public Float getRatedPrice() {
+        return this.price * this.rate.floatValue();
     }
 
     public void setPrice(Float Price) {
@@ -123,6 +132,16 @@ public class Flight extends UrlResource {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @JsonIgnore
+    @XmlTransient
+    public Double getRate() {
+        return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
     }
 
     @JsonIgnore

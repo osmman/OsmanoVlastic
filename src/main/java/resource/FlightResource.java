@@ -1,17 +1,23 @@
 package resource;
 
 import client.ClientException;
-import client.flight.AosFlightDistanceClient;
+import client.flight.FlightDistanceClient;
+import core.ejb.*;
 import core.mapper.FlightMapper;
 import core.query.WhereBuilder;
 import core.resource.AbstractFacade;
 import model.Flight;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,6 +27,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.DatatypeConverter;
 import java.util.ArrayList;
@@ -49,6 +56,9 @@ public class FlightResource extends AbstractFacade<Flight> {
 
     @Inject
     private UserTransaction userTransaction;
+
+    @Inject
+    private FlightDistanceClient flightDistanceClient;
 
     @GET
     @Path("/")
@@ -81,9 +91,7 @@ public class FlightResource extends AbstractFacade<Flight> {
         super.create(flight);
 
         try {
-
-            AosFlightDistanceClient client = new AosFlightDistanceClient();
-            Double distance = client.getDistance(flight.getFrom().getGeocode(), flight.getTo().getGeocode());
+            Double distance = flightDistanceClient.getDistance(flight.getFrom().getGeocode(), flight.getTo().getGeocode());
             flight.setDistance(distance.floatValue());
             flight.setPrice(distance.floatValue() * 10);
 
@@ -105,9 +113,7 @@ public class FlightResource extends AbstractFacade<Flight> {
         super.edit(flight);
 
         try {
-
-            AosFlightDistanceClient client = new AosFlightDistanceClient();
-            Double distance = client.getDistance(flight.getFrom().getGeocode(), flight.getTo().getGeocode());
+            Double distance = flightDistanceClient.getDistance(flight.getFrom().getGeocode(), flight.getTo().getGeocode());
             flight.setDistance(distance.floatValue());
             flight.setPrice(distance.floatValue() * 10);
 

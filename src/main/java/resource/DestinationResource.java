@@ -1,6 +1,7 @@
 package resource;
 
 import client.ClientException;
+import client.maps.MapsClient;
 import model.Geocode;
 import client.maps.GoogleMapsClient;
 import core.mapper.DestinationMapper;
@@ -39,6 +40,9 @@ public class DestinationResource extends AbstractFacade<Destination> {
     @Inject
     private UserTransaction userTransaction;
 
+    @Inject
+    private MapsClient mapsClient;
+
     @GET
     @Path("/")
     public Response getDestinations(@HeaderParam("X-Order") String order,
@@ -70,8 +74,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
         try {
             Destination destination = mapper.map(new Destination());
 
-            GoogleMapsClient client = new GoogleMapsClient();
-            Geocode geocode = client.getGeocode(destination.getName());
+            Geocode geocode = mapsClient.getGeocode(destination.getName());
             destination.setLatitude(geocode.getLatitude());
             destination.setLongitude(geocode.getLongitude());
 
@@ -95,8 +98,7 @@ public class DestinationResource extends AbstractFacade<Destination> {
             Destination destination = super.find(id);
             mapper.map(destination);
 
-            GoogleMapsClient client = new GoogleMapsClient();
-            Geocode geocode = client.getGeocode(destination.getName());
+            Geocode geocode = mapsClient.getGeocode(destination.getName());
             destination.setLatitude(geocode.getLatitude());
             destination.setLongitude(geocode.getLongitude());
 
