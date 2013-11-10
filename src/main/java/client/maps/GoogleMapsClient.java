@@ -10,6 +10,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Default;
+
+@Alternative
 public class GoogleMapsClient implements MapsClient {
 
     private Client client;

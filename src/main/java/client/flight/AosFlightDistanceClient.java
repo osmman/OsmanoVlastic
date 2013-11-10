@@ -9,6 +9,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.enterprise.inject.Alternative;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Tomáš
@@ -16,6 +18,7 @@ import org.json.simple.parser.ParseException;
  * Time: 22:26
  * To change this template use File | Settings | File Templates.
  */
+@Alternative
 public class AosFlightDistanceClient implements FlightDistanceClient {
 
     private Client client;
@@ -47,7 +50,7 @@ public class AosFlightDistanceClient implements FlightDistanceClient {
     private ClientResponse requestDistance(Geocode from, Geocode to) {
         WebResource webResource = client.resource(RESOURCE)
                 .queryParam("from", from.toString()).queryParam("to", to.toString());
-        System.out.println(webResource.getURI());
+
         ClientResponse response = webResource.accept("application/json").get(
                 ClientResponse.class);
 
