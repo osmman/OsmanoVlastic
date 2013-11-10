@@ -19,6 +19,7 @@ import java.util.Date;
  */
 @Entity
 @XmlRootElement
+@EntityListeners(FlightListener.class)
 public class Flight extends UrlResource {
 
     @Id
