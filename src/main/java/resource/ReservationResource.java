@@ -1,7 +1,15 @@
 package resource;
 
-import java.util.Collection;
-import java.util.Date;
+import client.print.bottomup.PrintService_TextPort_Client;
+import core.mapper.ReservationMapper;
+import core.query.WhereBuilder;
+import core.resource.AbstractFacade;
+import core.utils.RandomString;
+import model.Flight;
+import model.Reservation;
+import model.StateChoices;
+import org.jboss.resteasy.spi.UnauthorizedException;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -13,31 +21,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
-
-import org.jboss.resteasy.spi.UnauthorizedException;
-
-import model.Flight;
-import model.Reservation;
-import model.StateChoices;
-import core.mapper.ReservationMapper;
-import core.query.WhereBuilder;
-import core.resource.AbstractFacade;
-import core.utils.RandomString;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Date;
 
 @Path(ResourceType.RESERVATION)
 @Stateless
@@ -84,6 +73,22 @@ public class ReservationResource extends AbstractFacade<Reservation> {
         Reservation item = super.find(id);
         testAuthorization(item, password);
         return Response.status(Status.OK).entity(item).build();
+    }
+
+    @GET
+    @Path("/{id}/print")
+    @Produces({MediaType.TEXT_PLAIN, MediaType.APPLICATION_OCTET_STREAM})
+    public InputStream print(@HeaderParam("X-Password") String password,
+                                   @PathParam("id") Long id) {
+        Reservation item = super.find(id);
+        InputStream is = null;
+        testAuthorization(item, password);
+        try {
+            is = PrintService_TextPort_Client.getPrint();
+        } catch (Exception e) {
+            System.out.println("CRYYYY");
+        }
+        return is;
     }
 
     @POST
