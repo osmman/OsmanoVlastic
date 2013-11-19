@@ -16,7 +16,7 @@
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>7.4.Final</version>
                 <configuration>
-                    <hostname>10.99.0.10</hostname>
+                    <hostname>127.0.0.1</hostname>
                     <port>9999</port>
                     <username>admin</username>
                     <password>vagrant</password>
@@ -79,7 +79,7 @@
                 <configuration>
                     <wadlFile>${project.build.outputDirectory}/application.wadl</wadlFile>
                     <formatWadlFile>true</formatWadlFile>
-                    <baseUri>http://10.99.0.10:8080/osmanvlastic/rest</baseUri>
+                    <baseUri>http://127.0.0.1:8080/osmanvlastic/rest</baseUri>
                     <packagesResourceConfig>
                         <param>resource</param>
                     </packagesResourceConfig>
