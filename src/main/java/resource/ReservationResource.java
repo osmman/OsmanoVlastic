@@ -1,6 +1,5 @@
 package resource;
 
-import client.print.bottomup.PrintService_TextPort_Client;
 import core.mapper.ReservationMapper;
 import core.query.WhereBuilder;
 import core.resource.AbstractFacade;
@@ -81,13 +80,9 @@ public class ReservationResource extends AbstractFacade<Reservation> {
     public InputStream print(@HeaderParam("X-Password") String password,
                                    @PathParam("id") Long id) {
         Reservation item = super.find(id);
-        InputStream is = null;
         testAuthorization(item, password);
-        try {
-            is = PrintService_TextPort_Client.getPrint();
-        } catch (Exception e) {
-            System.out.println("CRYYYY");
-        }
+        InputStream is = null;
+
         return is;
     }
 
