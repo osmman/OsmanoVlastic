@@ -1,5 +1,6 @@
 package resource;
 
+import client.print.bottomup.PrintServiceAdapter;
 import core.mapper.ReservationMapper;
 import core.query.WhereBuilder;
 import core.resource.AbstractFacade;
@@ -82,6 +83,9 @@ public class ReservationResource extends AbstractFacade<Reservation> {
         Reservation item = super.find(id);
         testAuthorization(item, password);
         InputStream is = null;
+        PrintServiceAdapter ps = new PrintServiceAdapter();
+        ps.setServiceUrl("http://127.0.0.1:8080/osmanvlastic/PrintService?Wsdl");
+        is = ps.getFileIS(item);
 
         return is;
     }

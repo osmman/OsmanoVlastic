@@ -62,7 +62,6 @@ public class ObjectsMapper {
         result.setFrom(mapToServiceDestination(flight.getFrom()));
         result.setTo(mapToServiceDestination(flight.getTo()));
         result.setName(flight.getName());
-        result.setPrice(flight.getPrice());
         return result;
     }
 
