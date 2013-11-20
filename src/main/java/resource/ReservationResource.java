@@ -1,6 +1,6 @@
 package resource;
 
-import client.print.bottomup.PrintService_TextPort_Client;
+import client.print.bottomup.PrintServiceAdapter;
 import core.mapper.ReservationMapper;
 import core.resource.AbstractFacade;
 import core.utils.RandomString;
@@ -107,13 +107,12 @@ public class ReservationResource extends AbstractFacade<Reservation>
                              @PathParam("id") Long id)
     {
         Reservation item = super.find(id);
-        InputStream is = null;
         testAuthorization(item, password);
-        try {
-            is = PrintService_TextPort_Client.getPrint();
-        } catch (Exception e) {
-            System.out.println("CRYYYY");
-        }
+        InputStream is = null;
+        PrintServiceAdapter ps = new PrintServiceAdapter();
+        ps.setServiceUrl("http://127.0.0.1:8080/osmanvlastic/PrintService?Wsdl");
+        is = ps.getFileIS(item);
+
         return is;
     }
 
