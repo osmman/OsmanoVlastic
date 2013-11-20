@@ -9,6 +9,7 @@ import core.resource.AbstractFacade;
 import model.Destination;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -25,9 +26,11 @@ import java.util.Collection;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class DestinationResource extends AbstractFacade<Destination> {
+public class DestinationResource extends AbstractFacade<Destination>
+{
 
-    public DestinationResource() {
+    public DestinationResource()
+    {
         super(Destination.class);
     }
 
@@ -48,11 +51,13 @@ public class DestinationResource extends AbstractFacade<Destination> {
     public Response getDestinations(@HeaderParam("X-Order") String order,
                                     @HeaderParam("X-Base") Integer base,
                                     @HeaderParam("X-Offset") Integer offset,
-                                    @HeaderParam("X-Filter") String filter) {
+                                    @HeaderParam("X-Filter") String filter)
+    {
         Collection<Destination> destinations = super.findAll(order, base,
                 offset);
         GenericEntity<Collection<Destination>> entity = new GenericEntity<Collection<Destination>>(
-                destinations) {
+                destinations)
+        {
         };
         return Response.ok().header("X-Count-records", super.count())
                 .entity(entity).build();
@@ -60,7 +65,8 @@ public class DestinationResource extends AbstractFacade<Destination> {
 
     @GET
     @Path("/{id}")
-    public Destination getDestination(@PathParam("id") Long id) {
+    public Destination getDestination(@PathParam("id") Long id)
+    {
         Destination destination = super.find(id);
         testExistence(destination);
         destination.getArrivals();
@@ -70,7 +76,8 @@ public class DestinationResource extends AbstractFacade<Destination> {
     @POST
     @Path("/")
     @RolesAllowed({"admin"})
-    public Response add(DestinationMapper mapper) throws SystemException {
+    public Response add(DestinationMapper mapper) throws SystemException
+    {
         try {
             Destination destination = mapper.map(new Destination());
 
@@ -92,7 +99,8 @@ public class DestinationResource extends AbstractFacade<Destination> {
     @PUT
     @Path("/{id}")
     @RolesAllowed({"admin"})
-    public Response edit(@PathParam("id") Long id, DestinationMapper mapper) throws SystemException {
+    public Response edit(@PathParam("id") Long id, DestinationMapper mapper) throws SystemException
+    {
 
         try {
             Destination destination = super.find(id);
@@ -116,7 +124,8 @@ public class DestinationResource extends AbstractFacade<Destination> {
     @DELETE
     @Path("/{id}")
     @RolesAllowed({"admin"})
-    public Response delete(@PathParam("id") Long id) {
+    public Response delete(@PathParam("id") Long id)
+    {
         Destination item = super.find(id);
         testExistence(item);
         super.remove(item);
@@ -124,7 +133,8 @@ public class DestinationResource extends AbstractFacade<Destination> {
     }
 
     @Override
-    protected EntityManager getEntityManager() {
+    protected EntityManager getEntityManager()
+    {
         return em;
     }
 

@@ -8,6 +8,7 @@ import model.Flight;
 import model.Reservation;
 import model.StateChoices;
 import org.jboss.resteasy.spi.UnauthorizedException;
+import service.ReservationService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
