@@ -17,42 +17,50 @@ import model.Destination;
 import core.query.QueryBuilder;
 import core.query.WhereBuilder;
 
-public abstract class AbstractFacade<T> {
+public abstract class AbstractFacade<T>
+{
 
     private Class<T> entityClass;
 
-    public AbstractFacade(Class<T> entityClass) {
+    public AbstractFacade(Class<T> entityClass)
+    {
         this.entityClass = entityClass;
     }
 
     protected abstract EntityManager getEntityManager();
 
-    public void create(T entity) {
+    public void create(T entity)
+    {
         getEntityManager().persist(entity);
         getEntityManager().flush();
         getEntityManager().refresh(entity);
     }
 
-    public void edit(T entity) {
+    public void edit(T entity)
+    {
         getEntityManager().merge(entity);
         getEntityManager().flush();
         getEntityManager().refresh(entity);
     }
 
-    public void remove(T entity) {
+    public void remove(T entity)
+    {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
 
-    public T find(Object id) {
+    public T find(Object id)
+    {
         return getEntityManager().find(entityClass, id);
     }
 
-    public List<T> findAll(String order, Integer base, Integer offset) {
+    public List<T> findAll(String order, Integer base, Integer offset)
+    {
         return findAll(order, base, offset, null);
     }
 
     public List<T> findAll(String order, Integer base, Integer offset,
-                           WhereBuilder<T> whereBuilder) {
+                           WhereBuilder<T> whereBuilder)
+    {
         QueryBuilder<T> builder = new QueryBuilder<T>(entityClass,
                 getEntityManager());
         builder.setOrder(order);
@@ -63,15 +71,18 @@ public abstract class AbstractFacade<T> {
         return q.getResultList();
     }
 
-    public boolean contains(T entity) {
+    public boolean contains(T entity)
+    {
         return this.getEntityManager().contains(entity);
     }
 
-    public int count() {
+    public int count()
+    {
         return count(null);
     }
 
-    public int count(WhereBuilder<T> whereBuilder) {
+    public int count(WhereBuilder<T> whereBuilder)
+    {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(entityClass);
         Root<T> rt = cq.from(entityClass);
@@ -83,9 +94,10 @@ public abstract class AbstractFacade<T> {
         return ((Long) q.getSingleResult()).intValue();
     }
 
-    protected void testExistence(Object item) {
+    protected void testExistence(Object item)
+    {
         if (item == null) {
-            throw new NotFoundException("");
+            throw new NotFoundException("Object not found.");
         }
     }
 
