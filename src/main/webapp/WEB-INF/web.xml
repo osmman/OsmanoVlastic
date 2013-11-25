@@ -32,8 +32,9 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Reservation</web-resource-name>
-            <url-pattern>/rest/reservation</url-pattern>
+            <url-pattern>/rest/reservation/</url-pattern>
             <http-method>GET</http-method>
+            <http-method>DELETE</http-method>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>

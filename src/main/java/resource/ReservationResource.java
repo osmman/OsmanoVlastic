@@ -3,12 +3,12 @@ package resource;
 import client.print.bottomup.PrintServiceAdapter;
 import core.mapper.ReservationMapper;
 import core.resource.AbstractFacade;
-import core.utils.RandomString;
+import core.validation.Validator;
 import model.Flight;
+import model.Payment;
 import model.Reservation;
 import model.StateChoices;
 import org.jboss.resteasy.spi.UnauthorizedException;
-import service.ReservationService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -22,7 +22,6 @@ import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Date;
 
 @Path(ResourceType.RESERVATION)
 @Stateless
@@ -37,6 +36,9 @@ public class ReservationResource extends AbstractFacade<Reservation>
 
     @Inject
     private EntityManager em;
+
+    @Inject
+    private Validator validator;
 
     public ReservationResource()
     {
@@ -78,7 +80,7 @@ public class ReservationResource extends AbstractFacade<Reservation>
     {
         Reservation reservation = super.find(id);
         testAuthorization(reservation, password);
-        testStateNew(reservation);
+        testState(reservation, StateChoices.NEW);
 
         reservation.setState(StateChoices.CANCELED);
         super.edit(reservation);
@@ -88,12 +90,18 @@ public class ReservationResource extends AbstractFacade<Reservation>
 
     @POST
     @Path("/{id}/payment")
-    public Response payment(@HeaderParam("X-Password") String password, @PathParam("id") Long id)
+    public Response payment(@HeaderParam("X-Password") String password, @PathParam("id") Long id, Payment payment)
     {
 
         Reservation reservation = super.find(id);
         testAuthorization(reservation, password);
-        testStateNew(reservation);
+        testState(reservation, StateChoices.NEW);
+
+        validator.validate(payment);
+
+//        if (!payment.getAccountNumber().matches("^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$") || !payment.getCode().matches("^[0-9]{3}$")) {
+//            new org.jboss.resteasy.spi.BadRequestException("Wrong credit card information.");
+//        }
 
         reservation.setState(StateChoices.PAID);
         super.edit(reservation);
@@ -109,20 +117,18 @@ public class ReservationResource extends AbstractFacade<Reservation>
     {
         Reservation item = super.find(id);
         testAuthorization(item, password);
-        InputStream is = null;
         PrintServiceAdapter ps = new PrintServiceAdapter();
         ps.setServiceUrl("http://127.0.0.1:8080/osmanvlastic/PrintService?Wsdl");
-        is = ps.getFileIS(item);
+        InputStream is = ps.getFileIS(item);
 
         return is;
     }
 
     @POST
     @Path("/")
-    public Response add(@PathParam("flightId") Long flightId,
-                        ReservationMapper mapper)
+    public Response add(ReservationMapper mapper)
     {
-        Flight flight = em.find(Flight.class, flightId, LockModeType.PESSIMISTIC_READ);
+        Flight flight = em.find(Flight.class, mapper.getFlight(), LockModeType.PESSIMISTIC_READ);
         int count = 0;
         for (Reservation r : flight.getReservations()) {
             count += r.getSeats();
@@ -134,9 +140,6 @@ public class ReservationResource extends AbstractFacade<Reservation>
         Reservation reservation = new Reservation();
         mapper.map(reservation);
         reservation.setFlight(flight);
-        reservation.setCreated(new Date());
-        reservation.setPassword(RandomString.generateRandom(32));
-        reservation.setState(StateChoices.NEW);
         super.create(reservation);
         return Response.status(Status.CREATED)
                 .header("Locale", reservation.getUrl())
@@ -146,11 +149,11 @@ public class ReservationResource extends AbstractFacade<Reservation>
     @PUT
     @Path("/{id}")
     public Response edit(@HeaderParam("X-Password") String password,
-                         @PathParam("flightId") Long flightId, @PathParam("id") Long id,
+                         @PathParam("id") Long id,
                          ReservationMapper mapper)
     {
         Reservation reservation = super.find(id);
-        Flight flight = em.find(Flight.class, flightId, LockModeType.PESSIMISTIC_READ);
+        Flight flight = em.find(Flight.class, mapper.getFlight(), LockModeType.PESSIMISTIC_READ);
         int count = 0;
         for (Reservation r : flight.getReservations()) {
             if (r.getId().equals(id)) continue;
@@ -173,7 +176,7 @@ public class ReservationResource extends AbstractFacade<Reservation>
     {
         Reservation reservation = super.find(id);
         testAuthorization(reservation, password);
-        testStateNew(reservation);
+        testState(reservation, StateChoices.NEW, StateChoices.CANCELED);
 
         super.remove(reservation);
         return Response.status(Status.NO_CONTENT).build();
@@ -194,9 +197,17 @@ public class ReservationResource extends AbstractFacade<Reservation>
         }
     }
 
-    private void testStateNew(Reservation reservation)
+    private void testState(Reservation reservation, StateChoices... states)
     {
-        if (reservation.getState() != StateChoices.NEW) {
+        boolean exist = false;
+
+        for (StateChoices state : states) {
+            if (reservation.getState() == state) {
+                exist = true;
+            }
+        }
+
+        if (!exist) {
             throw new org.jboss.resteasy.spi.BadRequestException(String.format("Reservation is %s.", reservation.getState()));
         }
     }

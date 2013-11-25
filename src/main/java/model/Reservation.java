@@ -10,7 +10,10 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.ws.rs.DefaultValue;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+import core.utils.RandomString;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.resteasy.spi.touri.URITemplate;
 
 import resource.ResourceType;
@@ -109,6 +112,8 @@ public class Reservation extends UrlResource
         this.state = state;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public Long getFlightId()
     {
         return getFlight().getId();
@@ -118,5 +123,13 @@ public class Reservation extends UrlResource
     public void loadUrl()
     {
         super.loadUrl();
+    }
+
+    @PrePersist
+    private void prePersist()
+    {
+        this.setCreated(new Date());
+        this.setPassword(RandomString.generateRandom(32));
+        this.setState(StateChoices.NEW);
     }
 }
