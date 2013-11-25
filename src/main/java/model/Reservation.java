@@ -8,11 +8,14 @@ import java.sql.Time;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import core.utils.RandomString;
+import core.validation.anotation.Seats;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.resteasy.spi.touri.URITemplate;
 
@@ -26,6 +29,9 @@ import core.resource.UrlResource;
  */
 @Entity
 @XmlRootElement
+@Seats.List(value = {
+        @Seats(flight = "flight", seats = "seats")
+})
 public class Reservation extends UrlResource
 {
 
@@ -33,6 +39,7 @@ public class Reservation extends UrlResource
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     private Integer seats;
 
     private String password;
@@ -43,6 +50,7 @@ public class Reservation extends UrlResource
     private StateChoices state;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @Valid
     private Flight flight;
 
     private static final long serialVersionUID = 1L;

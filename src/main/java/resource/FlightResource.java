@@ -4,8 +4,10 @@ import client.ClientException;
 import client.flight.FlightDistanceClient;
 import core.ejb.ContextImpl;
 import core.mapper.FlightMapper;
+import core.message.*;
 import core.query.WhereBuilder;
 import core.resource.AbstractFacade;
+import core.validation.Validator;
 import model.Flight;
 
 import javax.annotation.security.RolesAllowed;
@@ -38,9 +40,11 @@ import java.util.regex.Pattern;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class FlightResource extends AbstractFacade<Flight> {
+public class FlightResource extends AbstractFacade<Flight>
+{
 
-    public FlightResource() {
+    public FlightResource()
+    {
         super(Flight.class);
     }
 
@@ -61,11 +65,13 @@ public class FlightResource extends AbstractFacade<Flight> {
     public Response getFlights(@HeaderParam("X-Order") String order,
                                @HeaderParam("X-Base") Integer base,
                                @HeaderParam("X-Offset") Integer offset,
-                               @HeaderParam("X-Filter") String filter) {
+                               @HeaderParam("X-Filter") String filter)
+    {
         Collection<Flight> flight = super.findAll(order, base, offset,
                 createWhere(filter));
         GenericEntity<Collection<Flight>> entity = new GenericEntity<Collection<Flight>>(
-                flight) {
+                flight)
+        {
         };
         return Response.ok()
                 .header("X-Count-records", super.count(createWhere(filter)))
@@ -74,14 +80,16 @@ public class FlightResource extends AbstractFacade<Flight> {
 
     @GET
     @Path("/{id}")
-    public Flight getFlight(@PathParam("id") Long id) {
+    public Flight getFlight(@PathParam("id") Long id)
+    {
         return super.find(id);
     }
 
     @POST
     @Path("/")
     @RolesAllowed({"admin"})
-    public Response add(FlightMapper mapper) throws SystemException {
+    public Response add(FlightMapper mapper) throws SystemException
+    {
         Flight flight = mapper.map(new Flight());
 
         super.create(flight);
@@ -103,7 +111,8 @@ public class FlightResource extends AbstractFacade<Flight> {
     @PUT
     @Path("/{id}")
     @RolesAllowed({"admin"})
-    public Response edit(@PathParam("id") Long id, FlightMapper mapper) throws SystemException {
+    public Response edit(@PathParam("id") Long id, FlightMapper mapper) throws SystemException
+    {
         Flight flight = super.find(id);
         mapper.map(flight);
         super.edit(flight);
@@ -125,7 +134,8 @@ public class FlightResource extends AbstractFacade<Flight> {
     @DELETE
     @Path("/{id}")
     @RolesAllowed({"admin"})
-    public Response delete(@PathParam("id") Long id) {
+    public Response delete(@PathParam("id") Long id)
+    {
         Flight item = super.find(id);
         if (item == null) {
             return Response.status(Status.NOT_FOUND).build();
@@ -135,12 +145,14 @@ public class FlightResource extends AbstractFacade<Flight> {
     }
 
     @Override
-    protected EntityManager getEntityManager() {
+    protected EntityManager getEntityManager()
+    {
         return em;
     }
 
     @SuppressWarnings("restriction")
-    private WhereBuilder<Flight> createWhere(final String filter) {
+    private WhereBuilder<Flight> createWhere(final String filter)
+    {
         if (filter == null || filter.isEmpty())
             return null;
 
@@ -164,10 +176,12 @@ public class FlightResource extends AbstractFacade<Flight> {
 
         final Date to = toDate;
 
-        WhereBuilder<Flight> whereBuilder = new WhereBuilder<Flight>() {
+        WhereBuilder<Flight> whereBuilder = new WhereBuilder<Flight>()
+        {
 
             public Predicate build(CriteriaQuery<Flight> cq,
-                                   CriteriaBuilder cb, Root<Flight> root) {
+                                   CriteriaBuilder cb, Root<Flight> root)
+            {
 
                 List<Predicate> predicates = new ArrayList<Predicate>();
 

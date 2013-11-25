@@ -96,12 +96,7 @@ public class ReservationResource extends AbstractFacade<Reservation>
         Reservation reservation = super.find(id);
         testAuthorization(reservation, password);
         testState(reservation, StateChoices.NEW);
-
         validator.validate(payment);
-
-//        if (!payment.getAccountNumber().matches("^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$") || !payment.getCode().matches("^[0-9]{3}$")) {
-//            new org.jboss.resteasy.spi.BadRequestException("Wrong credit card information.");
-//        }
 
         reservation.setState(StateChoices.PAID);
         super.edit(reservation);
@@ -129,13 +124,6 @@ public class ReservationResource extends AbstractFacade<Reservation>
     public Response add(ReservationMapper mapper)
     {
         Flight flight = em.find(Flight.class, mapper.getFlight(), LockModeType.PESSIMISTIC_READ);
-        int count = 0;
-        for (Reservation r : flight.getReservations()) {
-            count += r.getSeats();
-        }
-        if (flight.getSeats() < count + mapper.getSeats()) {
-            return Response.status(Status.BAD_REQUEST).build();
-        }
 
         Reservation reservation = new Reservation();
         mapper.map(reservation);
@@ -154,16 +142,13 @@ public class ReservationResource extends AbstractFacade<Reservation>
     {
         Reservation reservation = super.find(id);
         Flight flight = em.find(Flight.class, mapper.getFlight(), LockModeType.PESSIMISTIC_READ);
-        int count = 0;
-        for (Reservation r : flight.getReservations()) {
-            if (r.getId().equals(id)) continue;
-            count += r.getSeats();
-        }
-        if (flight.getSeats() < count + mapper.getSeats()) {
-            return Response.status(Status.BAD_REQUEST).build();
-        }
+
         testAuthorization(reservation, password);
+        testState(reservation, StateChoices.NEW);
+
         mapper.map(reservation);
+        reservation.setFlight(flight);
+
         super.edit(reservation);
         return Response.status(Status.NO_CONTENT)
                 .header("Locale", reservation.getUrl()).build();

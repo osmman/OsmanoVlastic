@@ -2,6 +2,7 @@ package resource;
 
 import client.ClientException;
 import client.maps.MapsClient;
+import core.validation.Validator;
 import model.Geocode;
 import client.maps.GoogleMapsClient;
 import core.mapper.DestinationMapper;
@@ -46,6 +47,9 @@ public class DestinationResource extends AbstractFacade<Destination>
     @Inject
     private MapsClient mapsClient;
 
+    @Inject
+    private Validator validator;
+
     @GET
     @Path("/")
     public Response getDestinations(@HeaderParam("X-Order") String order,
@@ -80,6 +84,7 @@ public class DestinationResource extends AbstractFacade<Destination>
     {
         try {
             Destination destination = mapper.map(new Destination());
+            validator.validate(destination);
 
             Geocode geocode = mapsClient.getGeocode(destination.getName());
             destination.setLatitude(geocode.getLatitude());
