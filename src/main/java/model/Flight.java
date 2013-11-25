@@ -1,6 +1,7 @@
 package model;
 
 import core.listener.FlightListener;
+import core.listener.UrlResourceListener;
 import core.resource.UrlResource;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -19,8 +20,9 @@ import java.util.Date;
  */
 @Entity
 @XmlRootElement
-@EntityListeners(FlightListener.class)
-public class Flight extends UrlResource {
+@EntityListeners({FlightListener.class, UrlResourceListener.class})
+public class Flight extends UrlResource
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -58,100 +60,116 @@ public class Flight extends UrlResource {
 
     private static final long serialVersionUID = 1L;
 
-    public Flight() {
+    public Flight()
+    {
         super();
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public Date getDateOfDeparture() {
+    public Date getDateOfDeparture()
+    {
         return this.dateOfDeparture;
     }
 
-    public void setDateOfDeparture(Date date) {
+    public void setDateOfDeparture(Date date)
+    {
         this.dateOfDeparture = date;
     }
 
-    public Float getDistance() {
+    public Float getDistance()
+    {
         return this.distance;
     }
 
-    public void setDistance(Float distance) {
+    public void setDistance(Float distance)
+    {
         this.distance = distance;
     }
 
-    public Integer getSeats() {
+    public Integer getSeats()
+    {
         return this.seats;
     }
 
-    public void setSeats(Integer seats) {
+    public void setSeats(Integer seats)
+    {
         this.seats = seats;
     }
 
     @JsonIgnore
     @XmlTransient
-    public Float getPrice() {
+    public Float getPrice()
+    {
         return this.price;
     }
 
     @XmlElement(name = "price")
     @JsonProperty("price")
-    public Float getRatedPrice() {
+    public Float getRatedPrice()
+    {
         return this.price * this.rate.floatValue();
     }
 
-    public void setPrice(Float Price) {
+    public void setPrice(Float Price)
+    {
         this.price = Price;
     }
 
-    public Destination getTo() {
+    public Destination getTo()
+    {
         return to;
     }
 
-    public void setTo(Destination to) {
+    public void setTo(Destination to)
+    {
         this.to = to;
     }
 
-    public Destination getFrom() {
+    public Destination getFrom()
+    {
         return from;
     }
 
-    public void setFrom(Destination from) {
+    public void setFrom(Destination from)
+    {
         this.from = from;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
     @JsonIgnore
     @XmlTransient
-    public Double getRate() {
+    public Double getRate()
+    {
         return rate;
     }
 
-    public void setRate(Double rate) {
+    public void setRate(Double rate)
+    {
         this.rate = rate;
     }
 
     @JsonIgnore
     @XmlTransient
-    public Collection<Reservation> getReservations() {
+    public Collection<Reservation> getReservations()
+    {
         return reservations;
-    }
-
-    @PostLoad
-    public void loadUrl() {
-        super.loadUrl();
     }
 }

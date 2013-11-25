@@ -11,6 +11,8 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import core.listener.FlightListener;
+import core.listener.UrlResourceListener;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import core.resource.UrlResource;
@@ -20,7 +22,8 @@ import core.resource.UrlResource;
  */
 @Entity
 @XmlRootElement
-public class Destination extends UrlResource {
+public class Destination extends UrlResource
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -44,62 +47,69 @@ public class Destination extends UrlResource {
     @SuppressWarnings("unused")
     private static final long serialVersionUID = 1L;
 
-    public Destination() {
+    public Destination()
+    {
         super();
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return this.name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getLatitude() {
+    public String getLatitude()
+    {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(String latitude)
+    {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public String getLongitude()
+    {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(String longitude)
+    {
         this.longitude = longitude;
     }
 
     @XmlTransient
     @JsonIgnore
-    public Collection<Flight> getArrivals() {
+    public Collection<Flight> getArrivals()
+    {
         return arrivals;
     }
 
     @XmlTransient
     @JsonIgnore
-    public Collection<Flight> getDepartures() {
+    public Collection<Flight> getDepartures()
+    {
         return departures;
     }
 
     @XmlTransient
     @JsonIgnore
-    public Geocode getGeocode() {
+    public Geocode getGeocode()
+    {
         return new Geocode(latitude, longitude);
-    }
-
-    @PostLoad
-    public void loadUrl() {
-        super.loadUrl();
     }
 }

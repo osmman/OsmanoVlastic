@@ -14,6 +14,7 @@ import javax.ws.rs.DefaultValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import core.listener.UrlResourceListener;
 import core.utils.RandomString;
 import core.validation.anotation.Seats;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -125,12 +126,6 @@ public class Reservation extends UrlResource
     public Long getFlightId()
     {
         return getFlight().getId();
-    }
-
-    @PostLoad
-    public void loadUrl()
-    {
-        super.loadUrl();
     }
 
     @PrePersist
