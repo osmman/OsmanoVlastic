@@ -98,7 +98,9 @@ Flight = {
 							+ Flight.flights[i].to.name
 							+ '</option>'
 							+ res
-							+ '</select></td><td><input type="text" name="seats" class="seats input-small" value="'
+							+ '</select></td><td>'
+							+ Flight.flights[i].price
+							+ '</td><td><input type="text" name="seats" class="seats input-small" value="'
 							+ Flight.flights[i].seats
 							+ '"</td></td><td><button type="button" class="update btn btn-success"><i class="icon-edit icon-white"/></button> <button type="button" class="delete btn btn-danger"><i class="icon-remove icon-white"/></button></td></tr>')
 					.appendTo($('#flightPart tbody'));

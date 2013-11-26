@@ -71,7 +71,9 @@ Destination = {
 							+ Destination.destinations[i].id
 							+ '</td><td><input type="text" name="name" class="name" value="'
 							+ Destination.destinations[i].name
-							+ '" /></td><td><button type="button" class="update btn btn-success"><i class="icon-edit icon-white" /></button> <button type="button" class="delete btn btn-danger"><i class="icon-remove icon-white" /></button></td></tr>')
+							+ '" /></td><td>'
+							+ Destination.destinations[i].latitude + '</td><td>'
+							+ Destination.destinations[i].longitude + '</td><td><button type="button" class="update btn btn-success"><i class="icon-edit icon-white" /></button> <button type="button" class="delete btn btn-danger"><i class="icon-remove icon-white" /></button></td></tr>')
 					.appendTo($('#destinationPart tbody'));
 		}
 		$('#destinationPart tbody td .update').bind('click', function() {
