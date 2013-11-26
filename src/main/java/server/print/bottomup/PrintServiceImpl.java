@@ -20,21 +20,22 @@ public class PrintServiceImpl implements PrintService{
     public DataHandler printReservation(Reservation reservation) throws PrintException {
         if (reservation == null) throw new PrintException("Nebyl zaslan objekt Reservation");
         if (reservation.getState() != StateChoices.PAID) throw new PrintException("Rezervace nebyla zaplaceno");
-        // Create temp file.
         File temp;
         byte[] output;
         try {
             temp = File.createTempFile("reservation", ".txt");
-            // Delete temp file when program exits.
+
             temp.deleteOnExit();
 
-            // Write to temp file
             BufferedWriter out = new BufferedWriter(new FileWriter(temp));
-            out.write("Text v souboru \n a taky na dalsim radku");
+            out.write("Rezervace letu: ");
+            out.write(reservation.getFlight().getName()+"\n");
+            out.write("Pocet sedadel: ");
+            out.write(reservation.getSeats()+"");
             out.close();
             output = FileUtils.readFileToByteArray(temp);
         } catch (IOException e) {
-            throw  new PrintException("asd");
+            throw  new PrintException("Nepodarilo se vygenerovat soubor");
         }
         return new ByteArrayDataHandler(output, "");
     }

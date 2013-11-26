@@ -46,10 +46,7 @@ public class PrintServiceAdapter {
 
         try {
             DataHandler resultHandler = service.printReservation(printReservation);
-
             is = resultHandler.getInputStream();
-
-
         } catch (PrintException e) {
             System.out.println("Expected exception: PrintException has occurred.");
             System.out.println(e.toString());
