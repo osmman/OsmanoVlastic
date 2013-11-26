@@ -80,9 +80,9 @@ Flight = {
 		}
 		for (i = 0; i < Flight.flights.length; i++) {
 			$(
-					'<tr><td class="id"><a href="#" class="open">'
+					'<tr><td class="id">'
 							+ Flight.flights[i].id
-							+ '</a></td><td><input type="text" name="dateOfDeparture" class="dateOfDeparture input-small" value="'
+							+ '</td><td><input type="text" name="dateOfDeparture" class="dateOfDeparture input-small" value="'
 							+ new Date(Flight.flights[i].dateOfDeparture).format("yyyy-MM-dd hh:mm:S")
 							+ '" /></td><td><input type="text" name="name" class="name input-small" value="'
 							+ Flight.flights[i].name
@@ -108,9 +108,6 @@ Flight = {
 		});
 		$('#flightPart tbody td .delete').bind('click', function() {
 			Flight.deleteSubmit(this);
-		});
-		$('#flightPart tbody td .open').bind('click', function() {
-			Reservation.open(this);
 		});
 	},
 	updateSubmit : function(e) {

@@ -5,8 +5,6 @@
 Reservation = {
 	open : function(e) {
 		// hide other
-		line = $(e).parents('tr');
-		Reservation.flightId = line.find('.id').text();
 		$('#destinationPart').hide();
 		$('#flightPart').hide();
 		$('#reservationPart').show();
@@ -32,7 +30,7 @@ Reservation = {
 	},
 	getReservations : function() {
 		$.ajax({
-			url : "rest/flight/" + Reservation.flightId + "/reservation",
+			url : "rest/reservation",
 			type : "GET",
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
@@ -57,6 +55,8 @@ Reservation = {
 			$(
 					'<tr><td class="id">'
 							+ Reservation.reservations[i].id
+							+ '</td><td class="flightId">'
+							+ Reservation.reservations[i].flight.id
 							+ '</td><td>'
 							+ new Date(Reservation.reservations[i].created).format("yyyy-MM-dd hh:mm:S")
 							+ '</td><td>'
@@ -78,15 +78,16 @@ Reservation = {
 	updateSubmit : function(e) {
 		line = $(e).parents('tr');
 		id = line.find('.id').text();
+		flightId = line.find('.flightId').text();
 		seats = line.find('.seats').val();
 		password = line.find('.password').val();
-		Reservation.updateReservation(id, seats, password);
+		Reservation.updateReservation(id, flightId, seats, password);
 	},
-	updateReservation : function(id, seats, password) {
+	updateReservation : function(id, flightId, seats, password) {
 		$.ajax({
-			url : "rest/flight/" + Reservation.flightId + "/reservation/" + id,
+			url : "rest/reservation/" + id,
 			type : "PUT",
-			data : '{"seats" : "' + seats + '"}',
+			data : '{"flight" : "'+flightId+'", "seats" : "' + seats + '"}',
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
@@ -113,7 +114,7 @@ Reservation = {
 	},
 	deleteReservation : function(id, password) {
 		$.ajax({
-			url : "rest/flight/" + Reservation.flightId + "/reservation/"+id,
+			url : "rest/reservation/"+id,
 			type : "DELETE",
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
@@ -135,15 +136,16 @@ Reservation = {
 		});
 	},
 	createSubmit : function(e) {
+	    flightId = $('#reservationFlightId').val();
 		seats = $('#reservationSeats').val();
-		Reservation.createReservation(seats);
+		Reservation.createReservation(flightId, seats);
 		e.preventDefault();
 	},
-	createReservation : function(seats) {
+	createReservation : function(flightId, seats) {
 		$.ajax({
-			url : "rest/flight/" + Reservation.flightId + "/reservation/",
+			url : "rest/reservation/",
 			type : "POST",
-			data : '{"seats" : "' + seats + '"}',
+			data : '{"flight" : "'+flightId+'", "seats" : "' + seats + '"}',
 			beforeSend : function(request) {
 				request.setRequestHeader('Authorization', 'Basic '
 						+ Authentication.token);
@@ -166,6 +168,5 @@ Reservation = {
 		$('#reservationPart tbody tr').remove();
 	},
 	order : 'id:asc',
-	flightId : '',
 	reservations : []
 }
