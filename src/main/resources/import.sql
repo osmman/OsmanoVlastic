@@ -15,3 +15,4 @@ insert into Flight (id, name, from_id, to_id, dateOfDeparture, seats, distance, 
 
 
 insert into Reservation (id, created, password, seats, state, flight_id) values (HIBERNATE_SEQUENCE.nextval, NOW(), 'il1jkjq41wgplcosozi1t25ouq5ruezp', 10, 'PAID', @flight);
+insert into Reservation (id, created, password, seats, state, flight_id) values (HIBERNATE_SEQUENCE.nextval, NOW(), 'il1jkjq41wgplcosozi1t25ouq5ruezp', 4, 'NEW', @flight);

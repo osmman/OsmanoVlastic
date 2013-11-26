@@ -41,15 +41,17 @@ public class SeatsValidator implements ConstraintValidator<Seats, Object>
             fieldSeats.setAccessible(true);
 
             Flight flight = (Flight) fieldObj.get(target);
+            if (flight == null) return false;
+
             Integer seats = (Integer) fieldSeats.get(target);
+            if (seats == null) return false;
 
             int count = 0;
             for (Reservation reservation : flight.getReservations()) {
-                if (reservation.getState() != StateChoices.CANCELED) {
+                if (reservation.getState() != StateChoices.CANCELED && !target.equals(reservation)) {
                     count += reservation.getSeats();
                 }
             }
-
             return flight.getSeats() >= count + seats;
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
