@@ -1,5 +1,7 @@
 package resource;
 
+import client.bank.secured.BankService;
+import client.bank.secured.TransactionException;
 import client.print.bottomup.PrintServiceAdapter;
 import core.mapper.ReservationMapper;
 import core.resource.AbstractFacade;
@@ -39,6 +41,9 @@ public class ReservationResource extends AbstractFacade<Reservation>
 
     @Inject
     private Validator validator;
+
+    @Inject
+    private BankService bankService;
 
     public ReservationResource()
     {
@@ -90,13 +95,16 @@ public class ReservationResource extends AbstractFacade<Reservation>
 
     @POST
     @Path("/{id}/payment")
-    public Response payment(@HeaderParam("X-Password") String password, @PathParam("id") Long id, Payment payment)
+    public Response payment(@HeaderParam("X-Password") String password, @PathParam("id") Long id, Payment payment) throws TransactionException
     {
 
         Reservation reservation = super.find(id);
         testAuthorization(reservation, password);
         testState(reservation, StateChoices.NEW);
         validator.validate(payment);
+
+        long account = Long.parseLong(payment.getAccountNumber().replace("-", ""));
+        bankService.newTransaction(account, 222222, 123456, String.format("Payment reservation: %d", reservation.getId()));
 
         reservation.setState(StateChoices.PAID);
         super.edit(reservation);

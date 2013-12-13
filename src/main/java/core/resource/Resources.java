@@ -16,12 +16,13 @@
  */
 package core.resource;
 
+import client.bank.BankServiceFactory;
+import client.bank.secured.BankService;
 import client.flight.AosFlightDistanceClient;
 import client.flight.FlightDistanceClient;
 import client.maps.GoogleMapsClient;
 import client.maps.MapsClient;
 
-import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -65,5 +66,12 @@ public class Resources
     public FlightDistanceClient produceDistanceClient()
     {
         return new AosFlightDistanceClient();
+    }
+
+    @Produces
+    @Default
+    public BankService produceBankClient()
+    {
+        return BankServiceFactory.create();
     }
 }
