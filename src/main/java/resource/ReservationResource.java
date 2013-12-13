@@ -42,8 +42,8 @@ public class ReservationResource extends AbstractFacade<Reservation>
     @Inject
     private Validator validator;
 
-//    @Inject
-//    private BankService bankService;
+    @Inject
+    private BankService bankService;
 
     public ReservationResource()
     {
@@ -103,7 +103,8 @@ public class ReservationResource extends AbstractFacade<Reservation>
         testState(reservation, StateChoices.NEW);
         validator.validate(payment);
 
-//        bankService.newTransaction(111111,222222,123456,String.format("Payment reservation: %d",reservation.getId()));
+        long account = Long.parseLong(payment.getAccountNumber().replace("-", ""));
+        bankService.newTransaction(account, 222222, 123456, String.format("Payment reservation: %d", reservation.getId()));
 
         reservation.setState(StateChoices.PAID);
         super.edit(reservation);
