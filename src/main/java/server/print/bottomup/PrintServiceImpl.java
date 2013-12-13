@@ -6,6 +6,9 @@ import org.apache.commons.io.FileUtils;
 import server.print.utils.ByteArrayDataHandler;
 
 import javax.activation.DataHandler;
+import javax.annotation.Resource;
+import javax.jms.ConnectionFactory;
+import javax.jms.Queue;
 import javax.jws.WebService;
 import javax.xml.ws.soap.MTOM;
 import java.io.BufferedWriter;
@@ -34,9 +37,12 @@ public class PrintServiceImpl implements PrintService{
             out.write(reservation.getSeats()+"");
             out.close();
             output = FileUtils.readFileToByteArray(temp);
+
+
         } catch (IOException e) {
             throw  new PrintException("Nepodarilo se vygenerovat soubor");
         }
         return new ByteArrayDataHandler(output, "");
     }
+
 }

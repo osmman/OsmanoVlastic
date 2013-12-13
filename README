@@ -1,4 +1,9 @@
-Pøíkaz vytvoøení datasource do jboss serveru:
+Start JBoss AS 7 Serveru:
+
+For Linux:  JBOSS_HOME_SERVER_1/bin/standalone.sh -c standalone-full.xml
+For Windows:  JBOSS_HOME_SERVER_1\bin\standalone.bat -c standalone-full.xml
+
+PÅ™Ã­kaz vytvoÅ™enÃ­ datasource do jboss serveru:
 
 mvn install
 

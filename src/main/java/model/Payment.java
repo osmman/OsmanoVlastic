@@ -1,7 +1,11 @@
 package model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -15,11 +19,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Payment
 {
     @NotNull
-    @Pattern(regexp = "^[0-9]{3}$")
-    private String code;
-
-    @NotNull
     @Pattern(regexp = "^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$")
+    @XmlElement(name = "bank-account")
+    @JsonProperty(value = "account-number")
     private String accountNumber;
 
     public String getAccountNumber()
@@ -30,15 +32,5 @@ public class Payment
     public void setAccountNumber(String accountNumber)
     {
         this.accountNumber = accountNumber;
-    }
-
-    public String getCode()
-    {
-        return code;
-    }
-
-    public void setCode(String code)
-    {
-        this.code = code;
     }
 }

@@ -3,6 +3,7 @@ package resource;
 import client.bank.secured.BankService;
 import client.bank.secured.TransactionException;
 import client.print.bottomup.PrintServiceAdapter;
+import core.mapper.EmailMapper;
 import core.mapper.ReservationMapper;
 import core.resource.AbstractFacade;
 import core.validation.Validator;
@@ -126,6 +127,21 @@ public class ReservationResource extends AbstractFacade<Reservation>
         InputStream is = printService.getFileIS(item);
 
         return is;
+    }
+
+    @POST
+    @Path("/{id}/print")
+    public Response sendToEmail(@HeaderParam("X-Password") String password,
+                                @PathParam("id") Long id, EmailMapper emailMapper)
+    {
+        Reservation item = super.find(id);
+        testAuthorization(item, password);
+
+        /**
+         * @TODO top-down PrintService
+         */
+
+        return Response.status(Status.NO_CONTENT).build();
     }
 
     @POST
