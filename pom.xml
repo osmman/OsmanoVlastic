@@ -16,10 +16,10 @@
                 <artifactId>jboss-as-maven-plugin</artifactId>
                 <version>7.4.Final</version>
                 <configuration>
-                    <hostname>127.0.0.1</hostname>
+                    <hostname>localhost</hostname>
                     <port>9999</port>
                     <username>admin</username>
-                    <password>vagrant</password>
+                    <password>123456</password>
                     <execute-commands/>
                     <executeCommands/>
                 </configuration>
@@ -79,7 +79,7 @@
                 <configuration>
                     <wadlFile>${project.build.outputDirectory}/application.wadl</wadlFile>
                     <formatWadlFile>true</formatWadlFile>
-                    <baseUri>http://127.0.0.1:8080/osmanvlastic/rest</baseUri>
+                    <baseUri>http://10.99.0.10:8080/osmanvlastic/rest</baseUri>
                     <packagesResourceConfig>
                         <param>resource</param>
                     </packagesResourceConfig>
@@ -206,7 +206,19 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.validation</groupId>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+            <version>2.7.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache-core</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+        <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>1.1.0.Final</version>
         </dependency>
