@@ -22,6 +22,8 @@ import client.flight.AosFlightDistanceClient;
 import client.flight.FlightDistanceClient;
 import client.maps.GoogleMapsClient;
 import client.maps.MapsClient;
+import client.print.bottomup.PrintService;
+import client.print.bottomup.PrintServiceAdapter;
 
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
@@ -73,5 +75,13 @@ public class Resources
     public BankService produceBankClient()
     {
         return BankServiceFactory.create();
+    }
+
+    @Produces
+    public PrintServiceAdapter producePrintClient()
+    {
+        PrintServiceAdapter ps = new PrintServiceAdapter();
+        ps.setServiceUrl("http://127.0.0.1:8080/osmanvlastic/PrintService?Wsdl");
+        return ps;
     }
 }

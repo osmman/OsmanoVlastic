@@ -45,6 +45,9 @@ public class ReservationResource extends AbstractFacade<Reservation>
     @Inject
     private BankService bankService;
 
+    @Inject
+    private PrintServiceAdapter printService;
+
     public ReservationResource()
     {
         super(Reservation.class);
@@ -120,9 +123,7 @@ public class ReservationResource extends AbstractFacade<Reservation>
     {
         Reservation item = super.find(id);
         testAuthorization(item, password);
-        PrintServiceAdapter ps = new PrintServiceAdapter();
-        ps.setServiceUrl("http://127.0.0.1:8080/osmanvlastic/PrintService?Wsdl");
-        InputStream is = ps.getFileIS(item);
+        InputStream is = printService.getFileIS(item);
 
         return is;
     }

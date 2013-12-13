@@ -3,6 +3,7 @@ package client.print.bottomup;
 import client.print.utils.ObjectsMapper;
 
 import javax.activation.DataHandler;
+import javax.enterprise.inject.Alternative;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.namespace.QName;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.net.URL;
  * Time: 0:44
  * To change this template use File | Settings | File Templates.
  */
+@Alternative
 public class PrintServiceAdapter {
 
     private URL serviceUrl;
