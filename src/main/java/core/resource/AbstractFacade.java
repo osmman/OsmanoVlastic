@@ -6,14 +6,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
-import javax.transaction.UserTransaction;
 
 import org.jboss.resteasy.spi.NotFoundException;
 
-import model.Destination;
 import core.query.QueryBuilder;
 import core.query.WhereBuilder;
 

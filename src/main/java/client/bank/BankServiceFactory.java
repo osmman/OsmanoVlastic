@@ -2,7 +2,6 @@ package client.bank;
 
 import client.bank.secured.BankService;
 import client.bank.secured.SecuredService;
-import client.bank.secured.TransactionException;
 import org.apache.ws.security.handler.WSHandlerConstants;
 
 import javax.xml.namespace.QName;

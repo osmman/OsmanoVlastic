@@ -1,7 +1,5 @@
 package core.validation;
 
-import model.Payment;
-
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;

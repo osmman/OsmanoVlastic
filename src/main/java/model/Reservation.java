@@ -1,26 +1,20 @@
 package model;
 
-import java.io.Serializable;
 import java.lang.Integer;
 import java.lang.Long;
 import java.lang.String;
-import java.sql.Time;
 import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.DefaultValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import core.listener.UrlResourceListener;
 import core.utils.RandomString;
 import core.validation.anotation.Seats;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.jboss.resteasy.spi.touri.URITemplate;
 
-import resource.ResourceType;
 import model.Flight;
 import model.StateChoices;
 import core.resource.UrlResource;

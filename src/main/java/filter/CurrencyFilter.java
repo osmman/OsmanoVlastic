@@ -2,7 +2,6 @@ package filter;
 
 import client.exchange.RateExchangeClient;
 import core.ejb.Context;
-import model.Flight;
 
 import javax.inject.Inject;
 import javax.servlet.*;
@@ -17,7 +16,8 @@ import java.util.logging.Logger;
  * Time: 16:24
  * To change this template use File | Settings | File Templates.
  */
-public class CurrencyFilter implements Filter {
+public class CurrencyFilter implements Filter
+{
 
     @Inject
     private RateExchangeClient rateExchangeClient;
@@ -29,11 +29,13 @@ public class CurrencyFilter implements Filter {
     private Logger logger;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) throws ServletException
+    {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+    {
         String currency = ((HttpServletRequest) request).getHeader("X-Currency");
         if (currency != null && !currency.isEmpty()) {
             Double rate = rateExchangeClient.getCurrency("CZK", currency);
@@ -43,6 +45,7 @@ public class CurrencyFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
+    public void destroy()
+    {
     }
 }

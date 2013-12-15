@@ -1,7 +1,6 @@
 package job;
 
 import core.query.WhereBuilder;
-import model.Flight;
 import model.Reservation;
 import model.StateChoices;
 import service.ReservationService;

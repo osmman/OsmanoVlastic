@@ -1,7 +1,6 @@
 package core.ejb.mapper;
 
 import client.bank.secured.TransactionException;
-import org.json.simple.JSONObject;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;

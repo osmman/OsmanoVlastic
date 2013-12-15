@@ -4,13 +4,11 @@ import client.ClientException;
 import client.maps.MapsClient;
 import core.validation.Validator;
 import model.Geocode;
-import client.maps.GoogleMapsClient;
 import core.mapper.DestinationMapper;
 import core.resource.AbstractFacade;
 import model.Destination;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;

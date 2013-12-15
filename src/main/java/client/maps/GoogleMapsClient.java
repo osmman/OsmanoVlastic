@@ -11,21 +11,23 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Default;
 
 @Alternative
-public class GoogleMapsClient implements MapsClient {
+public class GoogleMapsClient implements MapsClient
+{
 
     private Client client;
 
     public static final String RESOURCE = "http://maps.googleapis.com/maps/api/geocode/json";
 
-    public GoogleMapsClient() {
+    public GoogleMapsClient()
+    {
         super();
         client = Client.create();
     }
 
-    private ClientResponse requestGeocode(String city) {
+    private ClientResponse requestGeocode(String city)
+    {
         WebResource webResource = client.resource(RESOURCE)
                 .queryParam("address", city).queryParam("sensor", "false");
         ClientResponse response = webResource.accept("application/json").get(
@@ -38,7 +40,8 @@ public class GoogleMapsClient implements MapsClient {
         return response;
     }
 
-    private Geocode parseGeocode(JSONObject jsonObj) {
+    private Geocode parseGeocode(JSONObject jsonObj)
+    {
         if (jsonObj != null && jsonObj.containsKey("status")) {
             if (jsonObj.get("status").equals("OK")) {
                 JSONArray results = (JSONArray) jsonObj.get("results");
@@ -53,7 +56,8 @@ public class GoogleMapsClient implements MapsClient {
         throw new ClientException("Bad json format");
     }
 
-    public Geocode getGeocode(String city) {
+    public Geocode getGeocode(String city)
+    {
 
         ClientResponse response = requestGeocode(city);
         String output = response.getEntity(String.class);

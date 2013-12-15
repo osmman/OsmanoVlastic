@@ -1,13 +1,8 @@
 package core.ejb;
 
-import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
-import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -21,7 +16,8 @@ import java.util.logging.Logger;
  */
 
 @RequestScoped
-public class ContextImpl implements Context {
+public class ContextImpl implements Context
+{
 
     @Inject
     private Logger logger;
@@ -29,20 +25,24 @@ public class ContextImpl implements Context {
     private Map<String, Object> context;
 
     @PostConstruct
-    private void postConstruct() {
+    private void postConstruct()
+    {
         context = new HashMap<String, Object>();
         logger.info("Created");
     }
 
-    public Object get(String key) {
+    public Object get(String key)
+    {
         return context.get(key);
     }
 
-    public void add(String key, Object obj) {
+    public void add(String key, Object obj)
+    {
         context.put(key, obj);
     }
 
-    public boolean exist(String key) {
+    public boolean exist(String key)
+    {
         return context.containsKey(key);
     }
 

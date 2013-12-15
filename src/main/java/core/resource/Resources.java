@@ -22,7 +22,6 @@ import client.flight.AosFlightDistanceClient;
 import client.flight.FlightDistanceClient;
 import client.maps.GoogleMapsClient;
 import client.maps.MapsClient;
-import client.print.bottomup.PrintService;
 import client.print.bottomup.PrintServiceAdapter;
 
 import javax.enterprise.inject.Default;

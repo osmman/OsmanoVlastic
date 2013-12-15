@@ -1,14 +1,14 @@
 package core.utils;
 
-import java.util.Random;
-
-public class RandomString {
+public class RandomString
+{
 
     private static char[] alphabet;
 
     private final static int alphabetLength = 36;
 
-    public static String generateRandom(int length) {
+    public static String generateRandom(int length)
+    {
         StringBuilder result = new StringBuilder();
         char[] alphabet = getAlphabet();
         int j;
@@ -21,14 +21,16 @@ public class RandomString {
 
     }
 
-    public static char[] getAlphabet() {
+    public static char[] getAlphabet()
+    {
         if (alphabet == null) {
             alphabet = generateAlphabet();
         }
         return alphabet;
     }
 
-    private static char[] generateAlphabet() {
+    private static char[] generateAlphabet()
+    {
         char[] alphabet = new char[alphabetLength];
         int index = 0;
         for (char c = 'a'; c <= 'z'; c++) {

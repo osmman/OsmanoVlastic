@@ -124,9 +124,8 @@ public class ReservationResource extends AbstractFacade<Reservation>
     {
         Reservation item = super.find(id);
         testAuthorization(item, password);
-        InputStream is = printService.getFileIS(item);
 
-        return is;
+        return printService.getFileIS(item);
     }
 
     @POST

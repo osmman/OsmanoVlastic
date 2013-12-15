@@ -2,14 +2,10 @@ package core.listener;
 
 import core.ejb.Context;
 import model.Flight;
-import model.Reservation;
-import service.ReservationService;
 
-import javax.annotation.Resource;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.PostLoad;
@@ -23,7 +19,8 @@ import javax.persistence.PostUpdate;
  * Time: 12:42
  * To change this template use File | Settings | File Templates.
  */
-public class FlightListener {
+public class FlightListener
+{
 
     private BeanManager getBeanManager()
     {
@@ -47,7 +44,8 @@ public class FlightListener {
     @PostLoad
     @PostPersist
     @PostUpdate
-    public void load(Flight entity) throws NamingException {
+    public void load(Flight entity) throws NamingException
+    {
         Context context = lookupContext();
 
         if (context.exist("ExchangeRate")) {

@@ -2,16 +2,14 @@ package core.mapper;
 
 import java.sql.Date;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import model.Destination;
 import model.Flight;
 
 @XmlRootElement(name = "flight")
-public class FlightMapper extends Mapper<Flight> {
+public class FlightMapper extends Mapper<Flight>
+{
 
     private String name;
 
@@ -23,48 +21,59 @@ public class FlightMapper extends Mapper<Flight> {
 
     private Long from;
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public Date getDateOfDeparture() {
+    public Date getDateOfDeparture()
+    {
         return dateOfDeparture;
     }
 
-    public void setDateOfDeparture(Date dateOfDeparture) {
+    public void setDateOfDeparture(Date dateOfDeparture)
+    {
         this.dateOfDeparture = dateOfDeparture;
     }
 
-    public Integer getSeats() {
+    public Integer getSeats()
+    {
         return seats;
     }
 
-    public void setSeats(Integer seats) {
+    public void setSeats(Integer seats)
+    {
         this.seats = seats;
     }
 
-    public Long getTo() {
+    public Long getTo()
+    {
         return to;
     }
 
-    public void setTo(Long to) {
+    public void setTo(Long to)
+    {
         this.to = to;
     }
 
-    public Long getFrom() {
+    public Long getFrom()
+    {
         return from;
     }
 
-    public void setFrom(Long from) {
+    public void setFrom(Long from)
+    {
         this.from = from;
     }
 
     @Override
-    public Flight map(Flight origin) {
+    public Flight map(Flight origin)
+    {
         origin.setDateOfDeparture(dateOfDeparture);
         origin.setName(name);
         origin.setSeats(seats);

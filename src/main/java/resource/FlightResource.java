@@ -2,20 +2,15 @@ package resource;
 
 import client.ClientException;
 import client.flight.FlightDistanceClient;
-import core.ejb.ContextImpl;
 import core.mapper.FlightMapper;
-import core.message.*;
 import core.query.WhereBuilder;
 import core.resource.AbstractFacade;
-import core.validation.Validator;
 import model.Flight;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -176,7 +171,7 @@ public class FlightResource extends AbstractFacade<Flight>
 
         final Date to = toDate;
 
-        WhereBuilder<Flight> whereBuilder = new WhereBuilder<Flight>()
+        return new WhereBuilder<Flight>()
         {
 
             public Predicate build(CriteriaQuery<Flight> cq,
@@ -198,8 +193,6 @@ public class FlightResource extends AbstractFacade<Flight>
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         };
-
-        return whereBuilder;
 
     }
 

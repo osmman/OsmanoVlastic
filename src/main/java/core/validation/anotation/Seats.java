@@ -1,7 +1,6 @@
 package core.validation.anotation;
 
 import core.validation.SeatsValidator;
-import model.Flight;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
