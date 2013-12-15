@@ -1,4 +1,6 @@
-package server.print.bottomup;
+package client.print.bottomup;
+
+import server.print.bottomup.PrintServiceImpl;
 
 import javax.xml.ws.Endpoint;
 
