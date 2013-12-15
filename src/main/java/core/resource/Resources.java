@@ -18,6 +18,8 @@ package core.resource;
 
 import client.bank.BankServiceFactory;
 import client.bank.secured.BankService;
+import client.exchange.RateExchangeClient;
+import client.exchange.RateExchangeClientImpl;
 import client.flight.AosFlightDistanceClient;
 import client.flight.FlightDistanceClient;
 import client.maps.GoogleMapsClient;
@@ -74,6 +76,12 @@ public class Resources
     public BankService produceBankClient()
     {
         return BankServiceFactory.create();
+    }
+
+    @Produces
+    public RateExchangeClient produceExchangeClient()
+    {
+        return new RateExchangeClientImpl();
     }
 
     @Produces
