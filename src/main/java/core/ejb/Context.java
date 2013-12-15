@@ -1,6 +1,7 @@
 package core.ejb;
 
 import javax.ejb.Local;
+import javax.enterprise.context.RequestScoped;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +10,6 @@ import javax.ejb.Local;
  * Time: 18:40
  * To change this template use File | Settings | File Templates.
  */
-@Local
 public interface Context {
     public Object get(String key);
 

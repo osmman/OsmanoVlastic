@@ -6,9 +6,11 @@ import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,15 +20,18 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 
-@Stateless
+@RequestScoped
 public class ContextImpl implements Context {
+
+    @Inject
+    private Logger logger;
 
     private Map<String, Object> context;
 
     @PostConstruct
     private void postConstruct() {
         context = new HashMap<String, Object>();
-        System.out.println("construct");
+        logger.info("Created");
     }
 
     public Object get(String key) {

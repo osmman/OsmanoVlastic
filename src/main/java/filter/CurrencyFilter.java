@@ -35,11 +35,10 @@ public class CurrencyFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         String currency = ((HttpServletRequest) request).getHeader("X-Currency");
-        Double rate = 1.0;
         if (currency != null && !currency.isEmpty()) {
-            rate = rateExchangeClient.getCurrency("CZK", currency);
+            Double rate = rateExchangeClient.getCurrency("CZK", currency);
+            context.add("ExchangeRate", rate);
         }
-        context.add("ExchangeRate", rate);
         chain.doFilter(request, response);
     }
 
