@@ -37,6 +37,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PrintError }
+     * 
+     */
+    public PrintError createPrintError() {
+        return new PrintError();
+    }
+
+    /**
      * Create an instance of {@link Reservation }
      * 
      */
@@ -58,14 +66,6 @@ public class ObjectFactory {
      */
     public Flight createFlight() {
         return new Flight();
-    }
-
-    /**
-     * Create an instance of {@link PrintError }
-     * 
-     */
-    public PrintError createPrintError() {
-        return new PrintError();
     }
 
     /**
