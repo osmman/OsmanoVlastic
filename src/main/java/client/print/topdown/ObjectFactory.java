@@ -24,48 +24,16 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _PrintError_QNAME = new QName("http://www.printservice.org/", "PrintError");
-    private final static QName _Reservation_QNAME = new QName("http://www.printservice.org/", "reservation");
-    private final static QName _PrintReservation_QNAME = new QName("http://www.printservice.org/", "printReservation");
-    private final static QName _Flight_QNAME = new QName("http://www.printservice.org/", "flight");
+    private final static QName _PrintError_QNAME = new QName("http://www.printservicev2.org/", "PrintError");
+    private final static QName _PrintReservation_QNAME = new QName("http://www.printservicev2.org/", "printReservation");
+    private final static QName _Flight_QNAME = new QName("http://www.printservicev2.org/", "flight");
+    private final static QName _Reservation_QNAME = new QName("http://www.printservicev2.org/", "reservation");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: client.print.topdown
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link PrintError }
-     * 
-     */
-    public PrintError createPrintError() {
-        return new PrintError();
-    }
-
-    /**
-     * Create an instance of {@link Reservation }
-     * 
-     */
-    public Reservation createReservation() {
-        return new Reservation();
-    }
-
-    /**
-     * Create an instance of {@link Destination }
-     * 
-     */
-    public Destination createDestination() {
-        return new Destination();
-    }
-
-    /**
-     * Create an instance of {@link Flight }
-     * 
-     */
-    public Flight createFlight() {
-        return new Flight();
     }
 
     /**
@@ -77,28 +45,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link PrintError }{@code >}}
+     * Create an instance of {@link PrintError }
      * 
      */
-    @XmlElementDecl(namespace = "http://www.printservice.org/", name = "PrintError")
-    public JAXBElement<PrintError> createPrintError(PrintError value) {
-        return new JAXBElement<PrintError>(_PrintError_QNAME, PrintError.class, null, value);
+    public PrintError createPrintError() {
+        return new PrintError();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Reservation }{@code >}}
+     * Create an instance of {@link Flight }
      * 
      */
-    @XmlElementDecl(namespace = "http://www.printservice.org/", name = "reservation")
-    public JAXBElement<Reservation> createReservation(Reservation value) {
-        return new JAXBElement<Reservation>(_Reservation_QNAME, Reservation.class, null, value);
+    public Flight createFlight() {
+        return new Flight();
+    }
+
+    /**
+     * Create an instance of {@link Destination }
+     * 
+     */
+    public Destination createDestination() {
+        return new Destination();
+    }
+
+    /**
+     * Create an instance of {@link Reservation }
+     * 
+     */
+    public Reservation createReservation() {
+        return new Reservation();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PrintError }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.printservicev2.org/", name = "PrintError")
+    public JAXBElement<PrintError> createPrintError(PrintError value) {
+        return new JAXBElement<PrintError>(_PrintError_QNAME, PrintError.class, null, value);
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PrintReservation }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.printservice.org/", name = "printReservation")
+    @XmlElementDecl(namespace = "http://www.printservicev2.org/", name = "printReservation")
     public JAXBElement<PrintReservation> createPrintReservation(PrintReservation value) {
         return new JAXBElement<PrintReservation>(_PrintReservation_QNAME, PrintReservation.class, null, value);
     }
@@ -107,9 +98,18 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link Flight }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://www.printservice.org/", name = "flight")
+    @XmlElementDecl(namespace = "http://www.printservicev2.org/", name = "flight")
     public JAXBElement<Flight> createFlight(Flight value) {
         return new JAXBElement<Flight>(_Flight_QNAME, Flight.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link Reservation }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://www.printservicev2.org/", name = "reservation")
+    public JAXBElement<Reservation> createReservation(Reservation value) {
+        return new JAXBElement<Reservation>(_Reservation_QNAME, Reservation.class, null, value);
     }
 
 }

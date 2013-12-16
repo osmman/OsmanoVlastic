@@ -20,11 +20,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *       &lt;sequence>
  *         &lt;element name="dateOfDeparture" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="distance" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
- *         &lt;element name="from" type="{http://www.printservice.org/}destination" minOccurs="0"/>
+ *         &lt;element name="from" type="{http://www.printservicev2.org/}destination" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="price" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
  *         &lt;element name="seats" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="to" type="{http://www.printservice.org/}destination" minOccurs="0"/>
+ *         &lt;element name="to" type="{http://www.printservicev2.org/}destination" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

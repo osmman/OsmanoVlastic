@@ -3,6 +3,7 @@ package resource;
 import client.bank.secured.BankService;
 import client.bank.secured.TransactionException;
 import client.print.bottomup.PrintServiceAdapter;
+import client.print.topdown.PrintServiceV2Adapter;
 import core.mapper.EmailMapper;
 import core.mapper.ReservationMapper;
 import core.resource.AbstractFacade;
@@ -48,6 +49,9 @@ public class ReservationResource extends AbstractFacade<Reservation>
 
     @Inject
     private PrintServiceAdapter printService;
+
+    @Inject
+    private PrintServiceV2Adapter printServiceV2;
 
     public ReservationResource()
     {
@@ -136,9 +140,7 @@ public class ReservationResource extends AbstractFacade<Reservation>
         Reservation item = super.find(id);
         testAuthorization(item, password);
 
-        /**
-         * @TODO top-down PrintService
-         */
+        printServiceV2.getFileIS(item);
 
         return Response.status(Status.NO_CONTENT).build();
     }

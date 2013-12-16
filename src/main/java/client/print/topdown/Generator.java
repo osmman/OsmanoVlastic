@@ -19,7 +19,7 @@ public class Generator {
                 "src/main/java",
                 "-p",
                 "client.print.topdown",
-                "http://localhost:8080/osmanvlastic/PrintServiceV2?wsdl"
+                "http://localhost:8080/osmanvlastic/printServiceV2?wsdl"
         });
         System.out.println( "Done!" );
     }

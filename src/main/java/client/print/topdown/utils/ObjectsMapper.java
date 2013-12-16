@@ -1,9 +1,9 @@
-package client.print.utils;
+package client.print.topdown.utils;
 
-import client.print.bottomup.Destination;
-import client.print.bottomup.Flight;
-import client.print.bottomup.Reservation;
-import client.print.bottomup.StateChoices;
+import client.print.topdown.Destination;
+import client.print.topdown.Flight;
+import client.print.topdown.Reservation;
+import client.print.topdown.StateChoices;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;

@@ -25,6 +25,7 @@ import client.flight.FlightDistanceClient;
 import client.maps.GoogleMapsClient;
 import client.maps.MapsClient;
 import client.print.bottomup.PrintServiceAdapter;
+import client.print.topdown.PrintServiceV2Adapter;
 
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
@@ -89,6 +90,14 @@ public class Resources
     {
         PrintServiceAdapter ps = new PrintServiceAdapter();
         ps.setServiceUrl("http://127.0.0.1:8080/osmanvlastic/PrintService?Wsdl");
+        return ps;
+    }
+
+    @Produces
+    public PrintServiceV2Adapter producePrintClientV2()
+    {
+        PrintServiceV2Adapter ps = new PrintServiceV2Adapter();
+        ps.setServiceUrl("http://127.0.0.1:8080/osmanvlastic/printServiceV2?Wsdl");
         return ps;
     }
 }

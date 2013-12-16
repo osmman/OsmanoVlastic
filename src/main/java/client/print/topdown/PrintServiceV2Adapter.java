@@ -1,12 +1,10 @@
-package client.print.bottomup;
+package client.print.topdown;
 
-import client.print.bottomup.utils.ObjectsMapper;
+import client.print.topdown.utils.ObjectsMapper;
 
-import javax.activation.DataHandler;
 import javax.enterprise.inject.Alternative;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.namespace.QName;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -18,11 +16,11 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 @Alternative
-public class PrintServiceAdapter {
+public class PrintServiceV2Adapter {
 
     private URL serviceUrl;
 
-    private final QName SERVICE_NAME = new QName("http://printservice.org/", "PrintService");
+    private final QName SERVICE_NAME = new QName("http://www.printservicev2.org/", "printServiceV2");
 
     public void setServiceUrl(String url) {
         try {
@@ -33,8 +31,12 @@ public class PrintServiceAdapter {
     }
 
     public InputStream getFileIS(model.Reservation reservation) {
-        PrintService_Service ss = new PrintService_Service(serviceUrl, SERVICE_NAME);
-        PrintService service = ss.getTextPort();
+        URL wsdlURL = PrintServiceV2_Service.WSDL_LOCATION;
+
+
+        PrintServiceV2_Service ss = new PrintServiceV2_Service(wsdlURL, SERVICE_NAME);
+        //PrintServiceV2_Service ss = new PrintServiceV2_Service(serviceUrl, SERVICE_NAME);
+        PrintServiceV2 service = ss.getTextPort();
 
         InputStream is = null;
 
@@ -47,13 +49,9 @@ public class PrintServiceAdapter {
         }
 
         try {
-            DataHandler resultHandler = service.printReservation(printReservation);
-            is = resultHandler.getInputStream();
-        } catch (PrintException e) {
-            System.out.println("Expected exception: PrintException has occurred.");
-            System.out.println(e.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+            service.printReservation(printReservation, "email@asd.cz");
+        } catch (PrintReservationFault printReservationFault) {
+            printReservationFault.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
         return is;

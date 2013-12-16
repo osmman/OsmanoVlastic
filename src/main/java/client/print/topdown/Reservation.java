@@ -20,10 +20,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="created" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element ref="{http://www.printservice.org/}flight" minOccurs="0"/>
+ *         &lt;element ref="{http://www.printservicev2.org/}flight" minOccurs="0"/>
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="seats" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="state" type="{http://www.printservice.org/}stateChoices" minOccurs="0"/>
+ *         &lt;element name="state" type="{http://www.printservicev2.org/}stateChoices" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -44,7 +44,7 @@ public class Reservation {
 
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar created;
-    @XmlElement(namespace = "http://www.printservice.org/")
+    @XmlElement(namespace = "http://www.printservicev2.org/")
     protected Flight flight;
     protected String password;
     protected Integer seats;
