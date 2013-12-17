@@ -1,6 +1,7 @@
 package server.print.emailsender;
 
 
+import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -11,13 +12,16 @@ public class MessageWrapper implements Serializable
 
     private String email;
 
+    private File file;
+
     public MessageWrapper()
     {
     }
 
-    public MessageWrapper(String email)
+    public MessageWrapper(String email, File file)
     {
         this.email = email;
+        this.file = file;
     }
 
     public String getEmail()
@@ -28,5 +32,14 @@ public class MessageWrapper implements Serializable
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public File getFile() {
+
+        return file;
     }
 }
