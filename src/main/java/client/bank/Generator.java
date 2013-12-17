@@ -5,7 +5,7 @@ import org.apache.cxf.tools.wsdlto.WSDLToJava;
 public class Generator
 {
 
-    public static final String USERNAME = "turekto5"; // ToDo VYPLNIT pro testovani!!!!;
+    public static final String USERNAME = "turekto5";
 
     public static void main(String[] args)
     {
