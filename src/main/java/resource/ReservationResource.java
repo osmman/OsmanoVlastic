@@ -140,7 +140,7 @@ public class ReservationResource extends AbstractFacade<Reservation>
         Reservation item = super.find(id);
         testAuthorization(item, password);
 
-        validator.validate(emailMapper.getEmail());
+        validator.validate(emailMapper);
         try {
             printServiceV2.getFileIS(item, emailMapper.getEmail());
         } catch (Exception e) {
