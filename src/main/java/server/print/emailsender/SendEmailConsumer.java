@@ -1,12 +1,9 @@
-package service;
+package server.print.emailsender;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
+import javax.jms.*;
 import java.util.logging.Logger;
 
 /**
@@ -18,7 +15,7 @@ import java.util.logging.Logger;
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "/queue/SendEmailQueue"),
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")
 })
-public class SendEmailService implements MessageListener
+public class SendEmailConsumer implements MessageListener
 {
     @Inject
     private Logger logger;
@@ -29,8 +26,9 @@ public class SendEmailService implements MessageListener
         try {
             if (message instanceof ObjectMessage) {
                 ObjectMessage msg = (ObjectMessage) message;
+                MessageWrapper obj = (MessageWrapper) msg.getObject();
 
-                logger.info("Send to email: " + msg.getObject().toString());
+                logger.info("Send to email: " + obj.getEmail() + "; file: ");
 
             } else {
                 logger.warning("Message of wrong type: " + message.getClass().getName());
