@@ -37,14 +37,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PrintReservation }
-     * 
-     */
-    public PrintReservation createPrintReservation() {
-        return new PrintReservation();
-    }
-
-    /**
      * Create an instance of {@link PrintError }
      * 
      */
@@ -53,11 +45,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Flight }
+     * Create an instance of {@link Reservation }
      * 
      */
-    public Flight createFlight() {
-        return new Flight();
+    public Reservation createReservation() {
+        return new Reservation();
     }
 
     /**
@@ -69,11 +61,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Reservation }
+     * Create an instance of {@link Flight }
      * 
      */
-    public Reservation createReservation() {
-        return new Reservation();
+    public Flight createFlight() {
+        return new Flight();
+    }
+
+    /**
+     * Create an instance of {@link PrintReservation }
+     * 
+     */
+    public PrintReservation createPrintReservation() {
+        return new PrintReservation();
     }
 
     /**

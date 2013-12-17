@@ -9,12 +9,12 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * Created with IntelliJ IDEA.
- * User: usul
- * Date: 19.11.13
- * Time: 0:44
- * To change this template use File | Settings | File Templates.
- */
+* Created with IntelliJ IDEA.
+* User: usul
+* Date: 19.11.13
+* Time: 0:44
+* To change this template use File | Settings | File Templates.
+*/
 @Alternative
 public class PrintServiceV2Adapter {
 
@@ -30,12 +30,10 @@ public class PrintServiceV2Adapter {
         }
     }
 
-    public InputStream getFileIS(model.Reservation reservation) {
+    public void getFileIS(model.Reservation reservation, String email) throws Exception {
         URL wsdlURL = PrintServiceV2_Service.WSDL_LOCATION;
 
-
-        PrintServiceV2_Service ss = new PrintServiceV2_Service(wsdlURL, SERVICE_NAME);
-        //PrintServiceV2_Service ss = new PrintServiceV2_Service(serviceUrl, SERVICE_NAME);
+        PrintServiceV2_Service ss = new PrintServiceV2_Service(serviceUrl, SERVICE_NAME);
         PrintServiceV2 service = ss.getTextPort();
 
         InputStream is = null;
@@ -46,14 +44,15 @@ public class PrintServiceV2Adapter {
             printReservation = ObjectsMapper.mapToServiceReservation(reservation);
         } catch (DatatypeConfigurationException e) {
             e.printStackTrace();
+            throw new Exception(e);
         }
 
         try {
-            service.printReservation(printReservation, "email@asd.cz");
-        } catch (PrintReservationFault printReservationFault) {
-            printReservationFault.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            service.printReservation(printReservation, email);
+        } catch (PrintException e) {
+            e.printStackTrace();
+            throw new Exception(e);
         }
 
-        return is;
     }
 }

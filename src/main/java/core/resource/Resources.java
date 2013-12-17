@@ -97,7 +97,7 @@ public class Resources
     public PrintServiceV2Adapter producePrintClientV2()
     {
         PrintServiceV2Adapter ps = new PrintServiceV2Adapter();
-        ps.setServiceUrl("http://127.0.0.1:8080/osmanvlastic/printServiceV2?Wsdl");
+        ps.setServiceUrl("http://localhost:8080/osmanvlastic/printServiceV2?wsdl");
         return ps;
     }
 }

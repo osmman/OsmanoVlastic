@@ -140,9 +140,13 @@ public class ReservationResource extends AbstractFacade<Reservation>
         Reservation item = super.find(id);
         testAuthorization(item, password);
 
-        printServiceV2.getFileIS(item);
-
-        return Response.status(Status.NO_CONTENT).build();
+        validator.validate(emailMapper.getEmail());
+        try {
+            printServiceV2.getFileIS(item, emailMapper.getEmail());
+        } catch (Exception e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+        return Response.status(Status.OK).build();
     }
 
     @POST

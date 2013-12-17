@@ -104,14 +104,14 @@
 	<wsdl:message name="PrintReservationResponse">
 
 	</wsdl:message>
-	<wsdl:message name="PrintReservationFault">
+	<wsdl:message name="PrintException">
 		<wsdl:part name="PrintException" type="tns:PrintError"></wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="printServiceV2">
 		<wsdl:operation name="PrintReservation">
 			<wsdl:input message="tns:PrintReservationRequest"></wsdl:input>
 			<wsdl:output message="tns:PrintReservationResponse"></wsdl:output>
-            <wsdl:fault name="fault" message="tns:PrintReservationFault"></wsdl:fault>
+            <wsdl:fault name="PrintException" message="tns:PrintException"></wsdl:fault>
         </wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="PrintServiceSoapBinding"
@@ -127,8 +127,8 @@
 			<wsdl:output>
 				<soap:body use="literal" />
 			</wsdl:output>
-			<wsdl:fault name="fault">
-				<soap:fault use="literal" name="fault" />
+			<wsdl:fault name="PrintException">
+				<soap:fault use="literal" name="PrintException" />
 			</wsdl:fault>
 		</wsdl:operation>
 	</wsdl:binding>

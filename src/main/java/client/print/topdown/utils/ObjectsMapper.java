@@ -10,12 +10,12 @@ import javax.xml.datatype.DatatypeFactory;
 import java.util.GregorianCalendar;
 
 /**
- * Created with IntelliJ IDEA.
- * User: usul
- * Date: 19.11.13
- * Time: 0:19
- * To change this template use File | Settings | File Templates.
- */
+* Created with IntelliJ IDEA.
+* User: usul
+* Date: 19.11.13
+* Time: 0:19
+* To change this template use File | Settings | File Templates.
+*/
 public class ObjectsMapper {
 
     public static Reservation mapToServiceReservation(model.Reservation reservation) throws DatatypeConfigurationException {
